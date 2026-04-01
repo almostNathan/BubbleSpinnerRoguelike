@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://ci3mgpg466xp4"]
+
+[ext_resource type="Script" uid="uid://xpuln8odt82w" path="res://Scripts/start_point.gd" id="1_1pl8i"]
+[ext_resource type="Texture2D" uid="uid://dgocb1i6ielpu" path="res://Textures/white_ball.png" id="1_02nw6"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1pl8i"]
+radius = 16.0
+
+[node name="StartPoint" type="Node2D" groups=["ball"]]
+script = ExtResource("1_1pl8i")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0, 0, 0, 1)
+texture = ExtResource("1_02nw6")
+
+[node name="Area2D" type="Area2D" parent="." groups=["ball"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_1pl8i")
+
+[node name="Label" type="Label" parent="."]
+offset_left = -5.0
+offset_top = -13.0
+offset_right = 35.0
+offset_bottom = 10.0
+text = "|"

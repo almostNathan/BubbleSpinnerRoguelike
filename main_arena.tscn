@@ -1,0 +1,53 @@
+[gd_scene load_steps=10 format=3 uid="uid://b75l6lph5nhge"]
+
+[ext_resource type="Script" uid="uid://bduy347mjjq8q" path="res://main_arena.gd" id="1_r7ygb"]
+[ext_resource type="PackedScene" uid="uid://d2aoyrb284655" path="res://Scenes/launcher.tscn" id="3_yajwo"]
+[ext_resource type="Script" uid="uid://b8jcv8ufy54ub" path="res://Scripts/left_wall.gd" id="4_kl8a0"]
+[ext_resource type="Script" uid="uid://ctnyf7ugw8rbd" path="res://Scripts/right_wall.gd" id="5_3ienu"]
+[ext_resource type="Script" uid="uid://dsnj6dg3ppgl" path="res://Scripts/bottom_wall.gd" id="6_d4wu6"]
+[ext_resource type="PackedScene" uid="uid://btgl6q2mkb7vt" path="res://Scenes/ball_grid_manager.tscn" id="7_yilo4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yajwo"]
+size = Vector2(20, 921)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kl8a0"]
+size = Vector2(34, 921.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3ienu"]
+size = Vector2(1227, 21)
+
+[node name="MainArena" type="Node2D"]
+script = ExtResource("1_r7ygb")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_right = 1200.0
+offset_bottom = 900.0
+color = Color(0.329832, 0.476577, 0.885455, 1)
+
+[node name="Launcher" parent="." instance=ExtResource("3_yajwo")]
+position = Vector2(600, 24)
+
+[node name="LeftWall" type="Area2D" parent="."]
+script = ExtResource("4_kl8a0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWall"]
+position = Vector2(-10, 460.5)
+shape = SubResource("RectangleShape2D_yajwo")
+
+[node name="RightWall" type="Area2D" parent="."]
+position = Vector2(1172, -1)
+script = ExtResource("5_3ienu")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall"]
+position = Vector2(45, 461.25)
+shape = SubResource("RectangleShape2D_kl8a0")
+
+[node name="BottomWall" type="Area2D" parent="."]
+script = ExtResource("6_d4wu6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BottomWall"]
+position = Vector2(600.5, 900)
+shape = SubResource("RectangleShape2D_3ienu")
+
+[node name="BallGridManager" parent="." instance=ExtResource("7_yilo4")]
+position = Vector2(600, 450)

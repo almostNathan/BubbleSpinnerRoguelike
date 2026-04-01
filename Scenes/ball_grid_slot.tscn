@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://cmrw4tw3shjtt"]
+
+[ext_resource type="Script" uid="uid://dwdco242i6cfe" path="res://Scripts/ball_grid_slot.gd" id="1_x7o2b"]
+[ext_resource type="Texture2D" uid="uid://bjdkr54ivvsrv" path="res://Textures/ball_grid_slot_frame.png" id="2_811my"]
+
+[node name="BallGridSlot" type="Node2D"]
+script = ExtResource("1_x7o2b")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_811my")

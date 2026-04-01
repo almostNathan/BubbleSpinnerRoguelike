@@ -1,0 +1,2 @@
+extends BaseBall
+class_name StartPoint

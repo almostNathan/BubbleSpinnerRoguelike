@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://d2aoyrb284655"]
+
+[ext_resource type="Script" uid="uid://c4esqcksajh5y" path="res://Scripts/launcher.gd" id="1_8k52w"]
+[ext_resource type="Texture2D" uid="uid://cugs2haujfatd" path="res://Textures/launcher.png" id="2_uvje1"]
+
+[node name="Launcher" type="Node2D"]
+script = ExtResource("1_8k52w")
+
+[node name="LauncherSprite" type="Sprite2D" parent="."]
+position = Vector2(0, -4)
+texture = ExtResource("2_uvje1")

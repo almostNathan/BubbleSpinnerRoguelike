@@ -1,0 +1,80 @@
+extends Node2D
+class_name BallGridManager
+
+const BALL_SIZE : int = 32
+const GRID_SIZE : int = 20
+const RELATIVE_RIGHT : Vector2i = Vector2i(1, 0)
+const RELATIVE_LEFT : Vector2i = Vector2i(-1, 0)
+const RELATIVE_UP_RIGHT : Vector2i = Vector2i(0, -1)
+const RELATIVE_UP_LEFT : Vector2i = Vector2i(-1, -1)
+const RELATIVE_DOWN_RIGHT : Vector2i = Vector2i(0, 1)
+const RELATIVE_DOWN_LEFT : Vector2i = Vector2i(-1, 1)
+
+var center_point : Vector2
+var grid_slot_dict : Dictionary[Vector2i, BallGridSlot]
+
+@onready var start_point = $StartPoint
+
+var ball_grid_slot_scene = preload("res://Scenes/ball_grid_slot.tscn")
+
+func _ready() -> void:
+	SignalHub.connect_ball_colliding(ball_collided)
+
+func ball_collided(shot_ball: BaseBall, collided_ball: BaseBall):
+	shot_ball.reparent(self, true)
+	
+	# find nearest available position to shot_ball
+	var closest_position : Vector2i = Vector2(0,0)
+	var available_slots = get_available_slots()
+	for slot in available_slots:
+		# determine which slot is the closest to the ball.
+		if shot_ball.position.distance_to(grid_slot_dict[slot].get_current_position()) < shot_ball.position.distance_to(grid_slot_dict[closest_position].get_current_position()):
+			closest_position = slot
+	#
+	# Determine rotation value
+	# use Ball movement vector.
+	# find tangential vector of the movement. 
+	# 
+
+	print('shot_ball movement_direction Vector ',shot_ball.movement_direction)
+	print("ballgridmanager, angle from collision ", collided_ball.position.angle_to(shot_ball.movement_direction))
+	var base_rotation_value = collided_ball.position.angle_to(shot_ball.movement_direction)
+	
+	var rotation_tween = self.create_tween()
+	rotation_tween.tween_property(self, 'rotation', self.rotation + base_rotation_value/4, .3)
+	
+	grid_slot_dict[closest_position].set_ball_in_slot(shot_ball)
+	shot_ball.set_label(closest_position)
+	update_available_positions()
+
+func set_up_grid_locations():
+	#create a dictionary of 
+	# x,y coords (positions in the grid) : Vector2 position in game
+	var x_offset = 0
+	for y in range(-GRID_SIZE, GRID_SIZE):
+		if abs(y%2) == 1:
+			x_offset = BALL_SIZE/2
+		else:
+			x_offset = 0
+		for x in range(-GRID_SIZE,GRID_SIZE):
+
+			var new_relative_position = Vector2(x * BALL_SIZE + x_offset, y * (BALL_SIZE/2 * sqrt(3)))
+			var new_ball_grid_slot = ball_grid_slot_scene.instantiate()
+			new_ball_grid_slot.setup(Vector2i(x,y), new_relative_position)
+			self.add_child(new_ball_grid_slot)
+			grid_slot_dict[Vector2i(x,y)] = new_ball_grid_slot
+
+	grid_slot_dict[Vector2i(0,0)].set_ball_in_slot(start_point)
+	update_available_positions()
+
+func get_available_slots() -> Array[Vector2i]:
+	var available_slots = grid_slot_dict.keys().filter(func(key): return grid_slot_dict[key].is_available)
+	return available_slots
+
+func update_available_positions():
+	var slotted_positions = grid_slot_dict.keys().filter(func(key): return grid_slot_dict[key].has_ball())
+	for slotted_position in slotted_positions:
+		var adjacent_grid_slots = grid_slot_dict[slotted_position].get_adjacent_grid_positions()
+		
+		for adjacent_grid_slot in adjacent_grid_slots:
+			grid_slot_dict[adjacent_grid_slot].make_available()
