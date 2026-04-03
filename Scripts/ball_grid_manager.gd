@@ -30,21 +30,25 @@ func ball_collided(shot_ball: BaseBall, collided_ball: BaseBall):
 		# determine which slot is the closest to the ball.
 		if shot_ball.position.distance_to(grid_slot_dict[slot].get_current_position()) < shot_ball.position.distance_to(grid_slot_dict[closest_position].get_current_position()):
 			closest_position = slot
+	
+	grid_slot_dict[closest_position].set_ball_in_slot(shot_ball)
+	
 	#
 	# Determine rotation value
 	# use Ball movement vector.
 	# find tangential vector of the movement. 
 	# 
-
-	print('shot_ball movement_direction Vector ',shot_ball.movement_direction)
-	print("ballgridmanager, angle from collision ", collided_ball.position.angle_to(shot_ball.movement_direction))
-	var base_rotation_value = collided_ball.position.angle_to(shot_ball.movement_direction)
 	
-	var rotation_tween = self.create_tween()
-	rotation_tween.tween_property(self, 'rotation', self.rotation + base_rotation_value/4, .3)
+	var direction_to_center : Vector2 = shot_ball.global_position.direction_to(self.position)
+	var force_angle : float = direction_to_center.angle_to(shot_ball.movement_direction)
+	var force_value : float = shot_ball.speed / 1500
 	
-	grid_slot_dict[closest_position].set_ball_in_slot(shot_ball)
-	shot_ball.set_label(closest_position)
+	var rotation_tween : Tween = self.create_tween()
+	rotation_tween.set_trans(Tween.TRANS_QUART)
+	rotation_tween.set_ease(Tween.EASE_OUT)
+	rotation_tween.tween_property(self, 'rotation', self.rotation + (-sin(force_angle) * force_value), 1)
+	
+	
 	update_available_positions()
 
 func set_up_grid_locations():

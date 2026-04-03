@@ -18,11 +18,4 @@ func _ready() -> void:
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed('left_click'):
-		var new_ball = preload("res://Scenes/base_ball.tscn").instantiate()
-		new_ball.position = launcher.position
-		new_ball.set_movement_direction(launcher.global_position.direction_to(get_global_mouse_position()))
-		self.add_child(new_ball)
-
-
-func _physics_process(delta: float) -> void:
-	launcher.rotation = launcher.global_position.angle_to_point(get_global_mouse_position()) - PI/2
+		launcher.fire_launcher()

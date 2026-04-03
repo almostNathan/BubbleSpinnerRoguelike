@@ -40,7 +40,8 @@ func update_ball_position():
 func set_ball_in_slot(new_ball : BaseBall):
 	ball_in_slot = new_ball
 	var ball_position_tween = ball_in_slot.create_tween()
-	ball_position_tween.tween_property(ball_in_slot, 'position', get_current_position(), .01)
+	ball_position_tween.set_ease(Tween.EASE_OUT)
+	ball_position_tween.tween_property(ball_in_slot, 'position', get_current_position(), .05)
 	#ball_in_slot.position  = get_current_position()
 	is_available = false
 
@@ -66,6 +67,8 @@ func make_available():
 	if !ball_in_slot:
 		is_available = true
 		is_active = true
+		$Sprite2D.visible = true
 
 func make_unavailable():
 	is_available = false
+	$Sprite2D.visible = false

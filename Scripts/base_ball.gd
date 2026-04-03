@@ -6,20 +6,30 @@ class_name BaseBall
 
 @export var color = Color(0,.6,.6,1)
 
-var speed : float = 1500
+var speed : float = 500
 var movement_direction : Vector2 = Vector2(0,0)
 var collided = false
 
+var active = true
+var timekeeper = 0.0
 func _ready():
 	sprite.modulate = color
 
-func set_label(ball_pos: Vector2i):
-	$Label.text = str(int(ball_pos.x)) + "," + str(int(ball_pos.y))
+#func set_label(ball_pos: Vector2i):
+	#$Label.text = str(int(ball_pos.x)) + "," + str(int(ball_pos.y))
+func set_label(ball_num : String) -> void:
+	$Label.text = ball_num
 
 func _physics_process(delta: float) -> void:
-	self.position += movement_direction * speed * delta
+	if active:
+		self.position += movement_direction * speed * delta
+		timekeeper += delta
+		if timekeeper > 1:
+			print("base_ball current position: ", self.global_position)
+			timekeeper -= 1
 
 func set_movement_direction(new_movement_direction : Vector2):
+	print("base_ball set_movement_direction: ", new_movement_direction)
 	self.movement_direction = new_movement_direction.normalized()
 
 
@@ -42,3 +52,9 @@ func _on_area_2d_area_entered(area: Area2D) -> void:
 
 func change_movement_direction(change_vector : Vector2):
 	self.movement_direction *= change_vector
+
+func deactivate():
+	active = false
+
+func activate():
+	active = true
