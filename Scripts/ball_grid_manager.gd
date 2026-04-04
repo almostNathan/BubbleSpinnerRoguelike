@@ -63,21 +63,22 @@ func set_up_grid_locations():
 	# x,y coords (positions in the grid) : Vector2 position in game
 	var x_offset = 0
 	for y in range(-GRID_SIZE, GRID_SIZE):
-		if abs(y%2) == 1:
-			x_offset = BALL_SIZE/2
-		else:
-			x_offset = 0
 		for x in range(-GRID_SIZE,GRID_SIZE):
 			if (x+y) % 2 == 0:
-				if x < 0 and x % 2 == 1:
-					x_offset -= BALL_SIZE
-				var new_relative_position = Vector2(floor(x/2) * BALL_SIZE  + x_offset, y * (BALL_SIZE/2 * sqrt(3)))
+				if x == 0:
+					x_offset = 0
+				else:
+					x_offset =  x * BALL_SIZE / 2
+				if x==2 and y==0:
+					print(Vector2(x + x_offset  , y * (BALL_SIZE/2 * sqrt(3))))
+				var new_relative_position = Vector2(x + x_offset  , y * (BALL_SIZE/2 * sqrt(3)))
 				var new_ball_grid_slot : BallGridSlot = ball_grid_slot_scene.instantiate()
 				new_ball_grid_slot.setup(Vector2i(x,y), new_relative_position)
 				self.add_child(new_ball_grid_slot)
 				grid_slot_dict[Vector2i(x,y)] = new_ball_grid_slot
 
 	grid_slot_dict[Vector2i(0,0)].set_ball_in_slot(start_point)
+	print("ball_grid_manager : ", grid_slot_dict[Vector2i(0,0)].position)
 	update_available_positions()
 
 func get_available_slots() -> Array[Vector2i]:
