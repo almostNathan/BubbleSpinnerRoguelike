@@ -2,7 +2,8 @@ extends Node2D
 class_name BallGridManager
 
 const BALL_SIZE : int = 32
-const GRID_SIZE : int = 20
+const GRID_SIZE_X : int = 40
+const GRID_SIZE_Y : int = 20
 const RELATIVE_UP_LEFT : Vector2i = Vector2i(-1, -1)
 const RELATIVE_UP_RIGHT : Vector2i = Vector2i(1, -1)
 const RELATIVE_RIGHT : Vector2i = Vector2i(2, 0)
@@ -62,8 +63,8 @@ func set_up_grid_locations():
 	#create a dictionary of 
 	# x,y coords (positions in the grid) : Vector2 position in game
 	var x_offset = 0
-	for y in range(-GRID_SIZE, GRID_SIZE):
-		for x in range(-GRID_SIZE,GRID_SIZE):
+	for y in range(-GRID_SIZE_Y, GRID_SIZE_Y):
+		for x in range(-GRID_SIZE_X,GRID_SIZE_X):
 			if (x+y) % 2 == 0:
 				if x == 0:
 					x_offset = 0
