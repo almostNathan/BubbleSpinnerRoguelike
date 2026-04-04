@@ -3,12 +3,17 @@ class_name BallGridManager
 
 const BALL_SIZE : int = 32
 const GRID_SIZE : int = 20
-const RELATIVE_RIGHT : Vector2i = Vector2i(1, 0)
-const RELATIVE_LEFT : Vector2i = Vector2i(-1, 0)
-const RELATIVE_UP_RIGHT : Vector2i = Vector2i(0, -1)
-const RELATIVE_UP_LEFT : Vector2i = Vector2i(1, -1)
-const RELATIVE_DOWN_RIGHT : Vector2i = Vector2i(0, 1)
+const RELATIVE_UP_LEFT : Vector2i = Vector2i(-1, -1)
+const RELATIVE_UP_RIGHT : Vector2i = Vector2i(1, -1)
+const RELATIVE_RIGHT : Vector2i = Vector2i(2, 0)
+const RELATIVE_DOWN_RIGHT : Vector2i = Vector2i(1, 1)
 const RELATIVE_DOWN_LEFT : Vector2i = Vector2i(-1, 1)
+const RELATIVE_LEFT : Vector2i = Vector2i(-2, 0)
+const NEIGHBORS : Array[Vector2i] = [
+		RELATIVE_RIGHT, RELATIVE_LEFT,
+		RELATIVE_UP_RIGHT, RELATIVE_UP_LEFT,
+		RELATIVE_DOWN_RIGHT, RELATIVE_DOWN_LEFT
+]
 
 var center_point : Vector2
 var grid_slot_dict : Dictionary[Vector2i, BallGridSlot]
@@ -24,7 +29,7 @@ func ball_collided(shot_ball: BaseBall, collided_ball: BaseBall):
 	shot_ball.reparent(self, true)
 	
 	# find nearest available position to shot_ball
-	var closest_position : Vector2i = Vector2(0,0)
+	var closest_position : Vector2i = Vector2i(0,0)
 	var available_slots = get_available_slots()
 	for slot in available_slots:
 		# determine which slot is the closest to the ball.
@@ -50,6 +55,8 @@ func ball_collided(shot_ball: BaseBall, collided_ball: BaseBall):
 	
 	
 	update_available_positions()
+	print(get_connected_group(closest_position))
+		
 
 func set_up_grid_locations():
 	#create a dictionary of 
@@ -61,12 +68,14 @@ func set_up_grid_locations():
 		else:
 			x_offset = 0
 		for x in range(-GRID_SIZE,GRID_SIZE):
-
-			var new_relative_position = Vector2(x * BALL_SIZE + x_offset, y * (BALL_SIZE/2 * sqrt(3)))
-			var new_ball_grid_slot = ball_grid_slot_scene.instantiate()
-			new_ball_grid_slot.setup(Vector2i(x,y), new_relative_position)
-			self.add_child(new_ball_grid_slot)
-			grid_slot_dict[Vector2i(x,y)] = new_ball_grid_slot
+			if (x+y) % 2 == 0:
+				if x < 0 and x % 2 == 1:
+					x_offset -= BALL_SIZE
+				var new_relative_position = Vector2(floor(x/2) * BALL_SIZE  + x_offset, y * (BALL_SIZE/2 * sqrt(3)))
+				var new_ball_grid_slot : BallGridSlot = ball_grid_slot_scene.instantiate()
+				new_ball_grid_slot.setup(Vector2i(x,y), new_relative_position)
+				self.add_child(new_ball_grid_slot)
+				grid_slot_dict[Vector2i(x,y)] = new_ball_grid_slot
 
 	grid_slot_dict[Vector2i(0,0)].set_ball_in_slot(start_point)
 	update_available_positions()
@@ -84,14 +93,15 @@ func update_available_positions():
 			grid_slot_dict[adjacent_grid_slot].make_available()
 
 
-func get_connected_group(start_pos: Vector2i, grid: Dictionary) -> Array:
-	if not grid.has(start_pos):
+func get_connected_group(start_pos: Vector2i) -> Array[Vector2i]:
+	if not grid_slot_dict.has(start_pos):
 		return []
 
-	var target_color = grid[start_pos].color
-	var visited   := {}
-	var group     := []
-	var queue     := [start_pos]
+	var target_types = grid_slot_dict[start_pos].get_types()
+	var visited : Dictionary[Vector2i, bool] = {}
+	# group -> matching ball slots
+	var group : Array[Vector2i] = []
+	var queue : Array[Vector2i] = [start_pos]
 
 	while queue.size() > 0:
 		var current = queue.pop_front()
@@ -100,16 +110,17 @@ func get_connected_group(start_pos: Vector2i, grid: Dictionary) -> Array:
 			continue
 		visited[current] = true
 
-		if not grid.has(current):
+		if not grid_slot_dict.has(current):
 			continue
-		if grid[current].color != target_color:
-			continue
+		#check if the current gridballslot has any matching types to the target.
+		var has_type := func (x: String) -> bool:
+			return target_types.has(x)
+		if grid_slot_dict[current].get_types().any(has_type):
+			group.append(current)
 
-		group.append(current)
+			for offset in NEIGHBORS:
+				var neighbor = current + offset
+				if not visited.has(neighbor):
+					queue.append(neighbor)
 
-		for offset in NEIGHBORS:
-			var neighbor = current + offset
-			if not visited.has(neighbor):
-				queue.append(neighbor)
-
-	return group if group.size() >= 3 else []
+	return group if group.size() >= 3 else group

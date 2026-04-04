@@ -34,6 +34,9 @@ func add_type(new_type : String, new_color : Color) -> void:
 	types.append(new_type)
 	self.color = new_color
 
+func get_types() -> Array[String]:
+	return types
+
 func on_bounce():
 	pass
 
