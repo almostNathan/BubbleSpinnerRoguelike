@@ -6,9 +6,11 @@ class_name BaseBall
 
 @export var color = Color(0,.6,.6,1)
 
-var speed : float = 500
+var speed : float = 1500
 var movement_direction : Vector2 = Vector2(0,0)
 var collided = false
+
+var types : Array[String] = []
 
 var active = true
 var timekeeper = 0.0
@@ -23,15 +25,14 @@ func set_label(ball_num : String) -> void:
 func _physics_process(delta: float) -> void:
 	if active:
 		self.position += movement_direction * speed * delta
-		timekeeper += delta
-		if timekeeper > 1:
-			print("base_ball current position: ", self.global_position)
-			timekeeper -= 1
+	
 
 func set_movement_direction(new_movement_direction : Vector2):
-	print("base_ball set_movement_direction: ", new_movement_direction)
 	self.movement_direction = new_movement_direction.normalized()
 
+func add_type(new_type : String, new_color : Color) -> void:
+	types.append(new_type)
+	self.color = new_color
 
 func on_bounce():
 	pass

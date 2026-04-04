@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://xout0vgyajxg"]
+
+[ext_resource type="Script" uid="uid://causuovinloti" path="res://Scenes/ball_queue.gd" id="1_yo7ca"]
+
+[node name="BallQueue" type="Node2D"]
+script = ExtResource("1_yo7ca")

@@ -8,6 +8,7 @@ class_name MainArena
 func _ready() -> void:
 	#ball_grid_manager.position = 
 	ball_grid_manager.set_up_grid_locations()
+	launcher.new_round()
 	#ball_grid_manager.rotate_grid(1.0)
 	#for new_position in grid_positions.keys():
 		#var new_ball = preload("res://Scenes/base_ball.tscn").instantiate()

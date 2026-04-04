@@ -6,7 +6,7 @@ const GRID_SIZE : int = 20
 const RELATIVE_RIGHT : Vector2i = Vector2i(1, 0)
 const RELATIVE_LEFT : Vector2i = Vector2i(-1, 0)
 const RELATIVE_UP_RIGHT : Vector2i = Vector2i(0, -1)
-const RELATIVE_UP_LEFT : Vector2i = Vector2i(-1, -1)
+const RELATIVE_UP_LEFT : Vector2i = Vector2i(1, -1)
 const RELATIVE_DOWN_RIGHT : Vector2i = Vector2i(0, 1)
 const RELATIVE_DOWN_LEFT : Vector2i = Vector2i(-1, 1)
 
@@ -33,19 +33,19 @@ func ball_collided(shot_ball: BaseBall, collided_ball: BaseBall):
 	
 	grid_slot_dict[closest_position].set_ball_in_slot(shot_ball)
 	
-	#
-	# Determine rotation value
-	# use Ball movement vector.
-	# find tangential vector of the movement. 
-	# 
 	
+	###This section determines rotation
+	#Notes:
+	# add weight value to balls that will affect this process, 
+	# factoring in total weight of the current grid and the weight of the new ball
 	var direction_to_center : Vector2 = shot_ball.global_position.direction_to(self.position)
 	var force_angle : float = direction_to_center.angle_to(shot_ball.movement_direction)
 	var force_value : float = shot_ball.speed / 1500
-	
 	var rotation_tween : Tween = self.create_tween()
 	rotation_tween.set_trans(Tween.TRANS_QUART)
 	rotation_tween.set_ease(Tween.EASE_OUT)
+	#calculates the difference in angle of shot ball and the angle to the center point.
+	#Force is greatest when they are at 90/270 degrees and least at 0/180 -> sin
 	rotation_tween.tween_property(self, 'rotation', self.rotation + (-sin(force_angle) * force_value), 1)
 	
 	
@@ -82,3 +82,34 @@ func update_available_positions():
 		
 		for adjacent_grid_slot in adjacent_grid_slots:
 			grid_slot_dict[adjacent_grid_slot].make_available()
+
+
+func get_connected_group(start_pos: Vector2i, grid: Dictionary) -> Array:
+	if not grid.has(start_pos):
+		return []
+
+	var target_color = grid[start_pos].color
+	var visited   := {}
+	var group     := []
+	var queue     := [start_pos]
+
+	while queue.size() > 0:
+		var current = queue.pop_front()
+
+		if visited.has(current):
+			continue
+		visited[current] = true
+
+		if not grid.has(current):
+			continue
+		if grid[current].color != target_color:
+			continue
+
+		group.append(current)
+
+		for offset in NEIGHBORS:
+			var neighbor = current + offset
+			if not visited.has(neighbor):
+				queue.append(neighbor)
+
+	return group if group.size() >= 3 else []

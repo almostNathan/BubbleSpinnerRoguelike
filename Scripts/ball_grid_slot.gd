@@ -4,7 +4,7 @@ class_name BallGridSlot
 const RELATIVE_RIGHT : Vector2i = Vector2i(1, 0)
 const RELATIVE_LEFT : Vector2i = Vector2i(-1, 0)
 const RELATIVE_UP_RIGHT : Vector2i = Vector2i(0, -1)
-const RELATIVE_UP_LEFT : Vector2i = Vector2i(-1, -1)
+const RELATIVE_UP_LEFT : Vector2i = Vector2i(1, -1)
 const RELATIVE_DOWN_RIGHT : Vector2i = Vector2i(0, 1)
 const RELATIVE_DOWN_LEFT : Vector2i = Vector2i(-1, 1)
 
@@ -22,7 +22,8 @@ func setup(grid_position, new_position) -> void:
 	self.grid_position = grid_position
 	self.position = new_position
 	self.center_point = center_point
-
+	$Label.text = str(grid_position)
+	
 func get_current_position() -> Vector2:
 	return position
 
@@ -41,7 +42,7 @@ func set_ball_in_slot(new_ball : BaseBall):
 	ball_in_slot = new_ball
 	var ball_position_tween = ball_in_slot.create_tween()
 	ball_position_tween.set_ease(Tween.EASE_OUT)
-	ball_position_tween.tween_property(ball_in_slot, 'position', get_current_position(), .05)
+	ball_position_tween.tween_property(ball_in_slot, 'position', get_current_position(), .01)
 	#ball_in_slot.position  = get_current_position()
 	is_available = false
 
@@ -68,7 +69,9 @@ func make_available():
 		is_available = true
 		is_active = true
 		$Sprite2D.visible = true
+		$Label.visible = true
 
 func make_unavailable():
 	is_available = false
 	$Sprite2D.visible = false
+	$Label.visible = false
