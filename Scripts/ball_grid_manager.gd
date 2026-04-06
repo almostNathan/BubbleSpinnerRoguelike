@@ -85,7 +85,7 @@ func set_up_grid_locations():
 
 	grid_slot_dict[Vector2i(0,0)].set_ball_in_slot(start_point)
 	update_available_positions()
-	add_balls(20)
+	add_balls(40)
 
 func add_balls(num_balls : int):
 	##randomly shoot balls towards the center.
@@ -101,10 +101,10 @@ func add_balls(num_balls : int):
 		var new_ball = preload("res://Scenes/base_ball.tscn").instantiate()
 		var selected_type = types.pick_random()
 		new_ball.add_type(selected_type[0], selected_type[1])
-		new_ball.position = Vector2(300, 0).rotated(i/float(num_balls)*PI*2) + self.position
+		new_ball.position = Vector2(300, 0).rotated(randf()*2*PI) + self.position
 		new_ball.aim_at(self.global_position)
 		self.add_sibling(new_ball)
-		await get_tree().create_timer(.1).timeout
+		await get_tree().create_timer(.05).timeout
 		#new_ball.add_type("red", Color(1.0, 0.0, 0.0,1))
 		#new_ball.add_type("green", Color(0.0, 1.0, 0.0,1))
 		#new_ball.add_type("blue", Color(0.0, 0.0, 1.0,1))
