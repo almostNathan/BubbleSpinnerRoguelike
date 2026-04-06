@@ -8,20 +8,20 @@
 [ext_resource type="PackedScene" uid="uid://btgl6q2mkb7vt" path="res://Scenes/ball_grid_manager.tscn" id="7_yilo4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yajwo"]
-size = Vector2(20, 921)
+size = Vector2(20, 1140)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kl8a0"]
-size = Vector2(34, 921.5)
+size = Vector2(32, 1198.75)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3ienu"]
-size = Vector2(1227, 21)
+size = Vector2(1977.5, 21)
 
 [node name="MainArena" type="Node2D"]
 script = ExtResource("1_r7ygb")
 
 [node name="ColorRect" type="ColorRect" parent="."]
-offset_right = 1200.0
-offset_bottom = 900.0
+offset_right = 1960.0
+offset_bottom = 1114.0
 color = Color(0.329832, 0.476577, 0.885455, 1)
 
 [node name="Launcher" parent="." instance=ExtResource("3_yajwo")]
@@ -31,7 +31,6 @@ position = Vector2(600, 24)
 script = ExtResource("4_kl8a0")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWall"]
-position = Vector2(-10, 460.5)
 shape = SubResource("RectangleShape2D_yajwo")
 
 [node name="RightWall" type="Area2D" parent="."]
@@ -39,14 +38,12 @@ position = Vector2(1172, -1)
 script = ExtResource("5_3ienu")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall"]
-position = Vector2(45, 461.25)
 shape = SubResource("RectangleShape2D_kl8a0")
 
 [node name="BottomWall" type="Area2D" parent="."]
 script = ExtResource("6_d4wu6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BottomWall"]
-position = Vector2(600.5, 900)
 shape = SubResource("RectangleShape2D_3ienu")
 
 [node name="BallGridManager" parent="." instance=ExtResource("7_yilo4")]

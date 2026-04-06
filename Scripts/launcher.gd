@@ -3,11 +3,13 @@ class_name Launcher
 
 var ball_queue : BallQueue = preload("res://Scenes/ball_queue.tscn").instantiate()
 
+var y_position = 24
 var current_ball : BaseBall 
 var balls_fired = 0
 var shot_balls : Array[BaseBall] = []
 
 func _ready() -> void:
+	self.position = Vector2(get_viewport_rect().size.x/2, y_position)
 	pass
 
 func new_round() -> void:
@@ -15,13 +17,11 @@ func new_round() -> void:
 	reload()
 
 func reload() -> void:
-	print("\nlauncher, loading next ball #", balls_fired)
 	var new_ball : BaseBall = ball_queue.get_next_ball()
 	new_ball.position = self.position
 	new_ball.set_label(str(shot_balls))
 	new_ball.deactivate()
 	self.add_sibling(new_ball)
-	print(new_ball.position)
 	current_ball = new_ball
 
 

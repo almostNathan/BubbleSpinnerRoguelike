@@ -25,7 +25,10 @@ func set_label(ball_num : String) -> void:
 func _physics_process(delta: float) -> void:
 	if active:
 		self.position += movement_direction * speed * delta
-	
+
+func aim_at(target_position : Vector2):
+	self.movement_direction = self.global_position.direction_to(target_position)
+	#self.movement_direction = 
 
 func set_movement_direction(new_movement_direction : Vector2):
 	self.movement_direction = new_movement_direction.normalized()

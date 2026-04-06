@@ -24,19 +24,14 @@ var grid_slot_dict : Dictionary[Vector2i, BallGridSlot]
 var ball_grid_slot_scene = preload("res://Scenes/ball_grid_slot.tscn")
 
 func _ready() -> void:
+	self.position = Vector2(get_viewport_rect().size.x/2, get_viewport_rect().size.y/2)
 	SignalHub.connect_ball_colliding(ball_collided)
 
 func ball_collided(shot_ball: BaseBall, collided_ball: BaseBall):
 	shot_ball.reparent(self, true)
 	
-	# find nearest available position to shot_ball
-	var closest_position : Vector2i = Vector2i(0,0)
-	var available_slots = get_available_slots()
-	for slot in available_slots:
-		# determine which slot is the closest to the ball.
-		if shot_ball.position.distance_to(grid_slot_dict[slot].get_current_position()) < shot_ball.position.distance_to(grid_slot_dict[closest_position].get_current_position()):
-			closest_position = slot
-	
+
+	var closest_position = grid_spot_closest_to_position(shot_ball.position)
 	grid_slot_dict[closest_position].set_ball_in_slot(shot_ball)
 	
 	
@@ -59,6 +54,17 @@ func ball_collided(shot_ball: BaseBall, collided_ball: BaseBall):
 	update_available_positions()
 	delete_islands()
 
+func grid_spot_closest_to_position(from_position : Vector2):
+		# find nearest available position to shot_ball
+	var closest_position : Vector2i = Vector2i(0,0)
+	var available_slots = get_available_slots()
+	for i in range(len(available_slots)):
+		if i == 0:
+			closest_position = available_slots[i] 
+		# determine which slot is the closest to the ball.
+		if from_position.distance_to(grid_slot_dict[available_slots[i]].get_current_position()) < from_position.distance_to(grid_slot_dict[closest_position].get_current_position()):
+			closest_position = available_slots[i]
+	return closest_position
 
 func set_up_grid_locations():
 	#create a dictionary of 
@@ -79,6 +85,30 @@ func set_up_grid_locations():
 
 	grid_slot_dict[Vector2i(0,0)].set_ball_in_slot(start_point)
 	update_available_positions()
+	add_balls(20)
+
+func add_balls(num_balls : int):
+	##randomly shoot balls towards the center.
+	var types = [
+			["red", Color(1.0, 0.0, 0.0,1)],
+			["green", Color(0.0, 1.0, 0.0,1)],
+			["blue", Color(0.0, 0.0, 1.0,1)],
+			["yellow", Color(1.0, 1.0, 0.0,1)],
+			["cyan", Color(0.0, 1.0, 1.0,1)],
+			["purple", Color(1.0, 0.0, 1.0,1)],
+		]
+	for i in range(num_balls):
+		var new_ball = preload("res://Scenes/base_ball.tscn").instantiate()
+		var selected_type = types.pick_random()
+		new_ball.add_type(selected_type[0], selected_type[1])
+		new_ball.position = Vector2(300, 0).rotated(i/float(num_balls)*PI*2) + self.position
+		new_ball.aim_at(self.global_position)
+		self.add_sibling(new_ball)
+		await get_tree().create_timer(.1).timeout
+		#new_ball.add_type("red", Color(1.0, 0.0, 0.0,1))
+		#new_ball.add_type("green", Color(0.0, 1.0, 0.0,1))
+		#new_ball.add_type("blue", Color(0.0, 0.0, 1.0,1))
+
 
 func get_available_slots() -> Array[Vector2i]:
 	var available_slots = grid_slot_dict.keys().filter(func(key): return grid_slot_dict[key].is_available)
@@ -117,29 +147,22 @@ func delete_islands() -> void:
 
 	while queue.size() > 0:
 		var current = queue.pop_front()
-
 		if visited.has(current):
 			continue
 		visited[current] = true
-
 		if not grid_slot_dict.has(current):
 			continue
-		
 		if grid_slot_dict[current].has_ball():
 			group.append(current)
-		
-		for offset in NEIGHBORS:
-			var neighbor = current + offset
-			if not visited.has(neighbor): 
-				queue.append(neighbor)
+			for offset in NEIGHBORS:
+				var neighbor = current + offset
+				if not visited.has(neighbor): 
+					queue.append(neighbor)
+
 	var island_slots : Array[Vector2i] = get_slots_with_balls()
-	print("Ball_grid_manager counts group:", len(group), "  -  unavailable_slots:", len(island_slots))
 	for slot in group:
 		island_slots.erase(slot)
-	print("ball_grid_manager island slots: ", island_slots)
 	clear_slots(island_slots)
-	
-
 
 func get_connected_group(start_pos: Vector2i) -> Array[Vector2i]:
 	if not grid_slot_dict.has(start_pos):

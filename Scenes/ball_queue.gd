@@ -10,15 +10,18 @@ func get_next_ball() -> BaseBall:
 	return current_queue.pop_front()
 	
 func reload_current_queue() -> void:
-	for i in range(6):
+	var types = [
+			["red", Color(1.0, 0.0, 0.0,1)],
+			["green", Color(0.0, 1.0, 0.0,1)],
+			["blue", Color(0.0, 0.0, 1.0,1)],
+			["yellow", Color(1.0, 1.0, 0.0,1)],
+			["cyan", Color(0.0, 1.0, 1.0,1)],
+			["purple", Color(1.0, 0.0, 1.0,1)],
+		]
+	for i in range(10):
 		var new_ball = preload("res://Scenes/base_ball.tscn").instantiate()
+		var selected_type = types.pick_random()
+		new_ball.add_type(selected_type[0], selected_type[1])
 		current_queue.append(new_ball)
-	current_queue[0].add_type("red", Color(1.0, 0.0, 0.0,1))
-	current_queue[1].add_type("red", Color(1.0, 0.0, 0.0,1))
-	current_queue[2].add_type("green", Color(0.0, 1.0, 0.0,1))
-	current_queue[3].add_type("green", Color(0.0, 1.0, 0.0,1))
-	current_queue[4].add_type("blue", Color(0.0, 0.0, 1.0,1))
-	current_queue[5].add_type("blue", Color(0.0, 0.0, 1.0,1))
 	
-	print(current_queue)
 	
