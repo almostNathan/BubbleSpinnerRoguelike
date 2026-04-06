@@ -54,10 +54,11 @@ func ball_collided(shot_ball: BaseBall, collided_ball: BaseBall):
 	#Force is greatest when they are at 90/270 degrees and least at 0/180 -> sin
 	rotation_tween.tween_property(self, 'rotation', self.rotation + (-sin(force_angle) * force_value), 1)
 	
-	
+	clear_slots(get_connected_group(closest_position))
+
 	update_available_positions()
-	print(get_connected_group(closest_position))
-		
+	delete_islands()
+
 
 func set_up_grid_locations():
 	#create a dictionary of 
@@ -70,8 +71,6 @@ func set_up_grid_locations():
 					x_offset = 0
 				else:
 					x_offset =  x * BALL_SIZE / 2
-				if x==2 and y==0:
-					print(Vector2(x + x_offset  , y * (BALL_SIZE/2 * sqrt(3))))
 				var new_relative_position = Vector2(x + x_offset  , y * (BALL_SIZE/2 * sqrt(3)))
 				var new_ball_grid_slot : BallGridSlot = ball_grid_slot_scene.instantiate()
 				new_ball_grid_slot.setup(Vector2i(x,y), new_relative_position)
@@ -79,20 +78,67 @@ func set_up_grid_locations():
 				grid_slot_dict[Vector2i(x,y)] = new_ball_grid_slot
 
 	grid_slot_dict[Vector2i(0,0)].set_ball_in_slot(start_point)
-	print("ball_grid_manager : ", grid_slot_dict[Vector2i(0,0)].position)
 	update_available_positions()
 
 func get_available_slots() -> Array[Vector2i]:
 	var available_slots = grid_slot_dict.keys().filter(func(key): return grid_slot_dict[key].is_available)
 	return available_slots
 
+func get_unavailable_slots() -> Array[Vector2i]:
+	var unavailable_slots = grid_slot_dict.keys().filter(func(key): return !grid_slot_dict[key].is_available)
+	return unavailable_slots
+
+func get_slots_with_balls():
+	var slots_with_balls = grid_slot_dict.keys().filter(func(key): return grid_slot_dict[key].has_ball())
+	return slots_with_balls
+
 func update_available_positions():
+	var open_positions = grid_slot_dict.keys().filter(func(key): return !grid_slot_dict[key].has_ball())
+	for open_position in open_positions:
+		grid_slot_dict[open_position].make_unavailable()
 	var slotted_positions = grid_slot_dict.keys().filter(func(key): return grid_slot_dict[key].has_ball())
 	for slotted_position in slotted_positions:
 		var adjacent_grid_slots = grid_slot_dict[slotted_position].get_adjacent_grid_positions()
 		
 		for adjacent_grid_slot in adjacent_grid_slots:
 			grid_slot_dict[adjacent_grid_slot].make_available()
+
+func clear_slots(slot_positions : Array[Vector2i]):
+	for slot_position in slot_positions:
+		grid_slot_dict[slot_position].clear_slot()
+
+func delete_islands() -> void:
+	var start_pos : Vector2i = Vector2i(0,0)
+
+	var visited : Dictionary[Vector2i, bool] = {}
+	# group -> matching ball slots
+	var group : Array[Vector2i] = []
+	var queue : Array[Vector2i] = [start_pos]
+
+	while queue.size() > 0:
+		var current = queue.pop_front()
+
+		if visited.has(current):
+			continue
+		visited[current] = true
+
+		if not grid_slot_dict.has(current):
+			continue
+		
+		if grid_slot_dict[current].has_ball():
+			group.append(current)
+		
+		for offset in NEIGHBORS:
+			var neighbor = current + offset
+			if not visited.has(neighbor): 
+				queue.append(neighbor)
+	var island_slots : Array[Vector2i] = get_slots_with_balls()
+	print("Ball_grid_manager counts group:", len(group), "  -  unavailable_slots:", len(island_slots))
+	for slot in group:
+		island_slots.erase(slot)
+	print("ball_grid_manager island slots: ", island_slots)
+	clear_slots(island_slots)
+	
 
 
 func get_connected_group(start_pos: Vector2i) -> Array[Vector2i]:
@@ -122,7 +168,7 @@ func get_connected_group(start_pos: Vector2i) -> Array[Vector2i]:
 
 			for offset in NEIGHBORS:
 				var neighbor = current + offset
-				if not visited.has(neighbor):
+				if not visited.has(neighbor): 
 					queue.append(neighbor)
-
-	return group if group.size() >= 3 else group
+	var empty_return : Array[Vector2i] = []
+	return group if group.size() >= 3 else empty_return

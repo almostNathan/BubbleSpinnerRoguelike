@@ -47,6 +47,12 @@ func set_ball_in_slot(new_ball : BaseBall):
 	#ball_in_slot.position  = get_current_position()
 	is_available = false
 
+func clear_slot() -> void:
+	if ball_in_slot:
+		ball_in_slot.queue_free()
+	ball_in_slot = null
+	self.make_available()
+
 func get_adjacent_grid_positions() -> Array[Vector2i]:
 	var adjacent_grid_positions_array : Array[Vector2i] = []
 	for position_change in relative_positions_array:
