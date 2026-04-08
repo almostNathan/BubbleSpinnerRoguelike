@@ -20,27 +20,29 @@ size = Vector2(1977.5, 21)
 script = ExtResource("1_r7ygb")
 
 [node name="ColorRect" type="ColorRect" parent="."]
-offset_right = 1960.0
-offset_bottom = 1114.0
+offset_right = 1920.0
+offset_bottom = 1080.0
 color = Color(0.329832, 0.476577, 0.885455, 1)
 
 [node name="Launcher" parent="." instance=ExtResource("3_yajwo")]
 position = Vector2(600, 24)
 
 [node name="LeftWall" type="Area2D" parent="."]
+position = Vector2(0, 540)
 script = ExtResource("4_kl8a0")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWall"]
 shape = SubResource("RectangleShape2D_yajwo")
 
 [node name="RightWall" type="Area2D" parent="."]
-position = Vector2(1172, -1)
+position = Vector2(1920, 540)
 script = ExtResource("5_3ienu")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall"]
 shape = SubResource("RectangleShape2D_kl8a0")
 
 [node name="BottomWall" type="Area2D" parent="."]
+position = Vector2(960, 1080)
 script = ExtResource("6_d4wu6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BottomWall"]

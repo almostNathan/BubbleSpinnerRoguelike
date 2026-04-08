@@ -2,7 +2,7 @@ extends Node2D
 class_name MainArena
 
 @onready var launcher = $Launcher
-@onready var ball_grid_manager = $BallGridManager
+@onready var ball_grid_manager : BallGridManager = $BallGridManager
 @onready var start_point = $StartPoint
 
 func _ready() -> void:

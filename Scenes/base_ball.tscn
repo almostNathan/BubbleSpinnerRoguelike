@@ -22,6 +22,7 @@ texture = ExtResource("2_thgr1")
 shape = SubResource("CircleShape2D_kdads")
 
 [node name="Label" type="Label" parent="."]
+visible = false
 offset_left = -15.0
 offset_top = -7.0
 offset_right = 13.0

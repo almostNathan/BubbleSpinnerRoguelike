@@ -80,8 +80,8 @@ func make_available():
 	if !ball_in_slot:
 		is_available = true
 		is_active = true
-		$Sprite2D.visible = true
-		$Label.visible = true
+		$Sprite2D.visible = false
+		$Label.visible = false
 
 func make_unavailable():
 	is_available = false

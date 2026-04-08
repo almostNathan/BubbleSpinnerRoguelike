@@ -5,10 +5,12 @@ var current_queue : Array[BaseBall] = []
 
 func get_next_ball() -> BaseBall:
 	if current_queue.is_empty():
-		print("launcher reloading")
 		reload_current_queue()
 	return current_queue.pop_front()
 	
+	
+
+
 func reload_current_queue() -> void:
 	var types = [
 			["red", Color(1.0, 0.0, 0.0,1)],

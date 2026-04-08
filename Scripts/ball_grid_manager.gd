@@ -18,6 +18,7 @@ const NEIGHBORS : Array[Vector2i] = [
 
 var center_point : Vector2
 var grid_slot_dict : Dictionary[Vector2i, BallGridSlot]
+var shot_count = 0
 
 @onready var start_point = $StartPoint
 
@@ -26,14 +27,19 @@ var ball_grid_slot_scene = preload("res://Scenes/ball_grid_slot.tscn")
 func _ready() -> void:
 	self.position = Vector2(get_viewport_rect().size.x/2, get_viewport_rect().size.y/2)
 	SignalHub.connect_ball_colliding(ball_collided)
+	SignalHub.connect_ball_shot(ball_shot)
+
+func ball_shot(shot_ball, launcher):
+	shot_count += 1
+	if shot_count % 10 == 0:
+		await get_tree().create_timer(.2).timeout
+		add_balls(10)
 
 func ball_collided(shot_ball: BaseBall, collided_ball: BaseBall):
 	shot_ball.reparent(self, true)
-	
 
 	var closest_position = grid_spot_closest_to_position(shot_ball.position)
 	grid_slot_dict[closest_position].set_ball_in_slot(shot_ball)
-	
 	
 	###This section determines rotation
 	#Notes:
@@ -89,6 +95,7 @@ func set_up_grid_locations():
 
 func add_balls(num_balls : int):
 	##randomly shoot balls towards the center.
+	#TODO: create globals for possible ball types
 	var types = [
 			["red", Color(1.0, 0.0, 0.0,1)],
 			["green", Color(0.0, 1.0, 0.0,1)],
@@ -105,9 +112,6 @@ func add_balls(num_balls : int):
 		new_ball.aim_at(self.global_position)
 		self.add_sibling(new_ball)
 		await get_tree().create_timer(.05).timeout
-		#new_ball.add_type("red", Color(1.0, 0.0, 0.0,1))
-		#new_ball.add_type("green", Color(0.0, 1.0, 0.0,1))
-		#new_ball.add_type("blue", Color(0.0, 0.0, 1.0,1))
 
 
 func get_available_slots() -> Array[Vector2i]:

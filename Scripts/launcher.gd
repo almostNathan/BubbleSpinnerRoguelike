@@ -32,6 +32,7 @@ func fire_launcher():
 	if current_ball != null:
 		current_ball.set_movement_direction(current_ball.global_position.direction_to(get_global_mouse_position()))
 		current_ball.activate()
+		SignalHub.emit_ball_shot(current_ball, self)
 		#shot_balls.append(current_ball)
 		current_ball = null
 		balls_fired += 1
