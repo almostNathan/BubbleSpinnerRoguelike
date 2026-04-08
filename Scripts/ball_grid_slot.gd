@@ -49,7 +49,7 @@ func set_ball_in_slot(new_ball : BaseBall):
 
 func clear_slot() -> void:
 	if ball_in_slot:
-		ball_in_slot.queue_free()
+		ball_in_slot.queue_free() 
 	ball_in_slot = null
 	self.make_available()
 
@@ -80,8 +80,8 @@ func make_available():
 	if !ball_in_slot:
 		is_available = true
 		is_active = true
-		$Sprite2D.visible = false
-		$Label.visible = false
+		$Sprite2D.visible = true
+		$Label.visible = true
 
 func make_unavailable():
 	is_available = false

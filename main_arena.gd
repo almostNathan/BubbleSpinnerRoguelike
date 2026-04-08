@@ -1,6 +1,8 @@
 extends Node2D
 class_name MainArena
 
+@export var my_name : String
+
 @onready var launcher = $Launcher
 @onready var ball_grid_manager : BallGridManager = $BallGridManager
 @onready var start_point = $StartPoint

@@ -14,6 +14,7 @@ var types : Array[String] = []
 
 var active = true
 var timekeeper = 0.0
+
 func _ready():
 	sprite.modulate = color
 
@@ -28,7 +29,6 @@ func _physics_process(delta: float) -> void:
 
 func aim_at(target_position : Vector2):
 	self.movement_direction = self.global_position.direction_to(target_position)
-	#self.movement_direction = 
 
 func set_movement_direction(new_movement_direction : Vector2):
 	self.movement_direction = new_movement_direction.normalized()

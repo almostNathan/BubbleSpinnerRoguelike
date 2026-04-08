@@ -1,7 +1,7 @@
 extends Node2D
 class_name BallGridManager
 
-const BALL_SIZE : int = 32
+const BALL_SIZE : int = 40
 const GRID_SIZE_X : int = 40
 const GRID_SIZE_Y : int = 20
 const RELATIVE_UP_LEFT : Vector2i = Vector2i(-1, -1)
@@ -36,8 +36,8 @@ func ball_shot(shot_ball, launcher):
 		add_balls(10)
 
 func ball_collided(shot_ball: BaseBall, collided_ball: BaseBall):
-	shot_ball.reparent(self, true)
-
+	shot_ball.reparent(self)
+	#shot_ball.call_deferred("reparent", self, true)
 	var closest_position = grid_spot_closest_to_position(shot_ball.position)
 	grid_slot_dict[closest_position].set_ball_in_slot(shot_ball)
 	
@@ -55,10 +55,24 @@ func ball_collided(shot_ball: BaseBall, collided_ball: BaseBall):
 	#Force is greatest when they are at 90/270 degrees and least at 0/180 -> sin
 	rotation_tween.tween_property(self, 'rotation', self.rotation + (-sin(force_angle) * force_value), 1)
 	
-	clear_slots(get_connected_group(closest_position))
+	var connected_group_pos_array = get_connected_group_pos(closest_position)
+	if len(connected_group_pos_array) != 0:
+		score_and_clear(closest_position)
 
 	update_available_positions()
 	delete_islands()
+
+func score_and_clear(closest_position : Vector2i) -> void:
+	var connected_group_pos = get_connected_group_pos(closest_position)
+	var score = 0
+	for ball_pos in connected_group_pos:
+		var types = grid_slot_dict[ball_pos].get_types()
+		for type in types:
+			score += BallTypes.types[type]["value"]
+	
+	print(score)
+	
+	clear_slots(connected_group_pos)
 
 func grid_spot_closest_to_position(from_position : Vector2):
 		# find nearest available position to shot_ball
@@ -71,6 +85,8 @@ func grid_spot_closest_to_position(from_position : Vector2):
 		if from_position.distance_to(grid_slot_dict[available_slots[i]].get_current_position()) < from_position.distance_to(grid_slot_dict[closest_position].get_current_position()):
 			closest_position = available_slots[i]
 	return closest_position
+
+
 
 func set_up_grid_locations():
 	#create a dictionary of 
@@ -168,7 +184,7 @@ func delete_islands() -> void:
 		island_slots.erase(slot)
 	clear_slots(island_slots)
 
-func get_connected_group(start_pos: Vector2i) -> Array[Vector2i]:
+func get_connected_group_pos(start_pos: Vector2i) -> Array[Vector2i]:
 	if not grid_slot_dict.has(start_pos):
 		return []
 

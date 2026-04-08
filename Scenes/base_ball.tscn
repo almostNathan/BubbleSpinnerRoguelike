@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dgocb1i6ielpu" path="res://Textures/white_ball.png" id="2_thgr1"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_kdads"]
-radius = 16.0
+radius = 20.0
 
 [sub_resource type="LabelSettings" id="LabelSettings_8jf2s"]
 font_size = 10
@@ -14,6 +14,7 @@ font_color = Color(0, 0, 0, 1)
 script = ExtResource("1_8jf2s")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(1.25, 1.25)
 texture = ExtResource("2_thgr1")
 
 [node name="Area2D" type="Area2D" parent="." groups=["ball"]]

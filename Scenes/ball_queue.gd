@@ -7,8 +7,6 @@ func get_next_ball() -> BaseBall:
 	if current_queue.is_empty():
 		reload_current_queue()
 	return current_queue.pop_front()
-	
-	
 
 
 func reload_current_queue() -> void:

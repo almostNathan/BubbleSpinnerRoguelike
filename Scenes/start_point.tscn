@@ -4,13 +4,14 @@
 [ext_resource type="Texture2D" uid="uid://dgocb1i6ielpu" path="res://Textures/white_ball.png" id="1_02nw6"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1pl8i"]
-radius = 16.0
+radius = 20.0
 
 [node name="StartPoint" type="Node2D" groups=["ball"]]
 script = ExtResource("1_1pl8i")
 color = Color(0, 0, 0, 1)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(1.25, 1.25)
 texture = ExtResource("1_02nw6")
 
 [node name="Area2D" type="Area2D" parent="." groups=["ball"]]
