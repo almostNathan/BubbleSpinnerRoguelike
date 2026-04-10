@@ -40,7 +40,14 @@ func ball_collided(shot_ball: BaseBall, collided_ball: BaseBall):
 	#shot_ball.call_deferred("reparent", self, true)
 	var closest_position = grid_spot_closest_to_position(shot_ball.position)
 	grid_slot_dict[closest_position].set_ball_in_slot(shot_ball)
-	
+	rotate_ball_grid(shot_ball, collided_ball)
+	var connected_group_pos_array = get_connected_group_pos(closest_position)
+	if len(connected_group_pos_array) != 0:
+		score_and_clear(closest_position)
+	update_available_positions()
+	delete_islands()
+
+func rotate_ball_grid(shot_ball : BaseBall, collided_ball : BaseBall):
 	###This section determines rotation
 	#Notes:
 	# add weight value to balls that will affect this process, 
@@ -54,13 +61,7 @@ func ball_collided(shot_ball: BaseBall, collided_ball: BaseBall):
 	#calculates the difference in angle of shot ball and the angle to the center point.
 	#Force is greatest when they are at 90/270 degrees and least at 0/180 -> sin
 	rotation_tween.tween_property(self, 'rotation', self.rotation + (-sin(force_angle) * force_value), 1)
-	
-	var connected_group_pos_array = get_connected_group_pos(closest_position)
-	if len(connected_group_pos_array) != 0:
-		score_and_clear(closest_position)
 
-	update_available_positions()
-	delete_islands()
 
 func score_and_clear(closest_position : Vector2i) -> void:
 	var connected_group_pos = get_connected_group_pos(closest_position)
@@ -69,10 +70,9 @@ func score_and_clear(closest_position : Vector2i) -> void:
 		var types = grid_slot_dict[ball_pos].get_types()
 		for type in types:
 			score += BallTypes.types[type]["value"]
-	
-	print(score)
-	
+	Hud.change_score(score)
 	clear_slots(connected_group_pos)
+
 
 func grid_spot_closest_to_position(from_position : Vector2):
 		# find nearest available position to shot_ball
@@ -85,7 +85,6 @@ func grid_spot_closest_to_position(from_position : Vector2):
 		if from_position.distance_to(grid_slot_dict[available_slots[i]].get_current_position()) < from_position.distance_to(grid_slot_dict[closest_position].get_current_position()):
 			closest_position = available_slots[i]
 	return closest_position
-
 
 
 func set_up_grid_locations():
@@ -104,10 +103,10 @@ func set_up_grid_locations():
 				new_ball_grid_slot.setup(Vector2i(x,y), new_relative_position)
 				self.add_child(new_ball_grid_slot)
 				grid_slot_dict[Vector2i(x,y)] = new_ball_grid_slot
-
 	grid_slot_dict[Vector2i(0,0)].set_ball_in_slot(start_point)
 	update_available_positions()
 	add_balls(40)
+
 
 func add_balls(num_balls : int):
 	##randomly shoot balls towards the center.
@@ -134,13 +133,16 @@ func get_available_slots() -> Array[Vector2i]:
 	var available_slots = grid_slot_dict.keys().filter(func(key): return grid_slot_dict[key].is_available)
 	return available_slots
 
+
 func get_unavailable_slots() -> Array[Vector2i]:
 	var unavailable_slots = grid_slot_dict.keys().filter(func(key): return !grid_slot_dict[key].is_available)
 	return unavailable_slots
 
+
 func get_slots_with_balls():
 	var slots_with_balls = grid_slot_dict.keys().filter(func(key): return grid_slot_dict[key].has_ball())
 	return slots_with_balls
+
 
 func update_available_positions():
 	var open_positions = grid_slot_dict.keys().filter(func(key): return !grid_slot_dict[key].has_ball())
@@ -153,9 +155,11 @@ func update_available_positions():
 		for adjacent_grid_slot in adjacent_grid_slots:
 			grid_slot_dict[adjacent_grid_slot].make_available()
 
+
 func clear_slots(slot_positions : Array[Vector2i]):
 	for slot_position in slot_positions:
 		grid_slot_dict[slot_position].clear_slot()
+
 
 func delete_islands() -> void:
 	var start_pos : Vector2i = Vector2i(0,0)
@@ -183,6 +187,7 @@ func delete_islands() -> void:
 	for slot in group:
 		island_slots.erase(slot)
 	clear_slots(island_slots)
+
 
 func get_connected_group_pos(start_pos: Vector2i) -> Array[Vector2i]:
 	if not grid_slot_dict.has(start_pos):

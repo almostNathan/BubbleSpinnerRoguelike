@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://jxnaljy2gdmt"]
+
+[ext_resource type="Script" uid="uid://dq58ou4stw116" path="res://Globals/HUD/HUD.gd" id="1_pqaou"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_7brgm"]
+font_size = 32
+
+[sub_resource type="LabelSettings" id="LabelSettings_pqaou"]
+font_size = 32
+
+[node name="Hud" type="CanvasLayer"]
+script = ExtResource("1_pqaou")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+offset_right = 92.0
+offset_bottom = 138.0
+
+[node name="ScoreLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "0"
+label_settings = SubResource("LabelSettings_7brgm")
+
+[node name="LastScoreLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "0"
+label_settings = SubResource("LabelSettings_pqaou")
