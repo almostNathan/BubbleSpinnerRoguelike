@@ -19,17 +19,17 @@ var is_active = true
 var is_available = false
 var types : Array[String] = []
 
-func setup(grid_position, new_position) -> void:
-	self.grid_position = grid_position
+func setup(new_grid_position, new_position) -> void:
+	self.grid_position = new_grid_position
 	self.position = new_position
 	self.center_point = center_point
-	$Label.text = str(grid_position).substr(1,str(grid_position).find(')')-1)
+	$Label.text = str(self.grid_position).substr(1,str(self.grid_position).find(')')-1)
 	
 func get_current_position() -> Vector2:
-	return position
+	return self.position
 
 func get_current_global_position() -> Vector2:
-	var current_global_position = position + center_point
+	var current_global_position = self.position + center_point
 	#current_global_position.rotated(grid_rotation)
 	return current_global_position
 
@@ -45,11 +45,12 @@ func set_ball_in_slot(new_ball : BaseBall):
 	ball_position_tween.set_ease(Tween.EASE_OUT)
 	ball_position_tween.tween_property(ball_in_slot, 'position', get_current_position(), .01)
 	#ball_in_slot.position  = get_current_position()
-	is_available = false
+	self.make_unavailable() 
+	
 
-func clear_slot() -> void:
+func destroy_slot() -> void:
 	if ball_in_slot:
-		ball_in_slot.queue_free() 
+		ball_in_slot.destroy() 
 	ball_in_slot = null
 	self.make_available()
 
@@ -58,6 +59,12 @@ func get_adjacent_grid_positions() -> Array[Vector2i]:
 	for position_change in relative_positions_array:
 		adjacent_grid_positions_array.append(grid_position + position_change)
 	return adjacent_grid_positions_array
+
+func score_slot() -> int:
+	if ball_in_slot != null:
+		return ball_in_slot.score_ball()
+	else:
+		return 0
 
 func get_types() -> Array[String]:
 	if ball_in_slot:

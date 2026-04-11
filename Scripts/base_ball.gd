@@ -1,6 +1,8 @@
 extends Node2D
 class_name BaseBall
 
+signal on_destroy(ball)
+
 @onready var sprite = $Sprite2D
 @onready var hitbox = $Area2D
 
@@ -8,12 +10,11 @@ class_name BaseBall
 
 var speed : float = 1500
 var movement_direction : Vector2 = Vector2(0,0)
+var active = true
 var collided = false
 
 var types : Array[String] = []
 
-var active = true
-var timekeeper = 0.0
 
 func _ready():
 	sprite.modulate = color
@@ -40,6 +41,10 @@ func add_type(new_type : String, new_color : Color) -> void:
 func get_types() -> Array[String]:
 	return types
 
+func destroy() -> void:
+	self.on_destroy.emit(self)
+	self.queue_free()
+
 func on_bounce():
 	pass
 
@@ -47,6 +52,14 @@ func put_ball_in_position(new_position : Vector2):
 	self.position = new_position
 	self.speed = 0
 
+func score_ball() -> int:
+	if len(types) != 0:
+		var score_sum = 0
+		for type in types:
+			score_sum += BallTypes.types[type]['value']
+		return score_sum
+	else:
+		return 0
 
 func _on_area_2d_area_entered(area: Area2D) -> void:
 	if area.has_method('bounce'):

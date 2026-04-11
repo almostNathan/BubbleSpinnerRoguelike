@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=3 uid="uid://ynvfjej4yka5"]
+
+[ext_resource type="Script" uid="uid://dinujdxm3680c" path="res://Scripts/UI/score_number.gd" id="1_qvxvp"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_qvxvp"]
+font_size = 32
+font_color = Color(0.784314, 0.784314, 0.796078, 1)
+outline_size = 15
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 2
+shadow_color = Color(0, 0, 0, 0.823529)
+
+[node name="ScoreNumber" type="Node2D"]
+script = ExtResource("1_qvxvp")
+
+[node name="Container" type="Container" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Container"]
+layout_mode = 2
+text = "15"
+label_settings = SubResource("LabelSettings_qvxvp")

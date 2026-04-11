@@ -18,11 +18,13 @@ const NEIGHBORS : Array[Vector2i] = [
 
 var center_point : Vector2
 var grid_slot_dict : Dictionary[Vector2i, BallGridSlot]
-var shot_count = 0
+var shot_count : int = 0
 
-@onready var start_point = $StartPoint
 
-var ball_grid_slot_scene = preload("res://Scenes/ball_grid_slot.tscn")
+@onready var start_point : StartPoint = $StartPoint
+
+var score_number_scene : PackedScene = preload("res://Scenes/UI/score_number.tscn")
+var ball_grid_slot_scene : PackedScene = preload("res://Scenes/ball_grid_slot.tscn")
 
 func _ready() -> void:
 	self.position = Vector2(get_viewport_rect().size.x/2, get_viewport_rect().size.y/2)
@@ -32,7 +34,7 @@ func _ready() -> void:
 func ball_shot(shot_ball, launcher):
 	shot_count += 1
 	if shot_count % 10 == 0:
-		await get_tree().create_timer(.2).timeout
+		await get_tree().create_timer(.5).timeout
 		add_balls(10)
 
 func ball_collided(shot_ball: BaseBall, collided_ball: BaseBall):
@@ -67,9 +69,11 @@ func score_and_clear(closest_position : Vector2i) -> void:
 	var connected_group_pos = get_connected_group_pos(closest_position)
 	var score = 0
 	for ball_pos in connected_group_pos:
-		var types = grid_slot_dict[ball_pos].get_types()
-		for type in types:
-			score += BallTypes.types[type]["value"]
+		score += grid_slot_dict[ball_pos].score_slot()
+	
+	var score_number :ScoreNumber = score_number_scene.instantiate()
+	add_sibling(score_number)
+	score_number.set_values_and_animate(score, grid_slot_dict[closest_position].global_position)
 	Hud.change_score(score)
 	clear_slots(connected_group_pos)
 
@@ -97,8 +101,8 @@ func set_up_grid_locations():
 				if x == 0:
 					x_offset = 0
 				else:
-					x_offset =  x * BALL_SIZE / 2
-				var new_relative_position = Vector2(x + x_offset  , y * (BALL_SIZE/2 * sqrt(3)))
+					x_offset =  x * BALL_SIZE / 2.0
+				var new_relative_position = Vector2(x + x_offset  , y * (BALL_SIZE/2.0 * sqrt(3)))
 				var new_ball_grid_slot : BallGridSlot = ball_grid_slot_scene.instantiate()
 				new_ball_grid_slot.setup(Vector2i(x,y), new_relative_position)
 				self.add_child(new_ball_grid_slot)
@@ -158,7 +162,7 @@ func update_available_positions():
 
 func clear_slots(slot_positions : Array[Vector2i]):
 	for slot_position in slot_positions:
-		grid_slot_dict[slot_position].clear_slot()
+		grid_slot_dict[slot_position].destroy_slot()
 
 
 func delete_islands() -> void:

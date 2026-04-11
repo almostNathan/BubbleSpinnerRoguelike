@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dqksymoidea0w"]
+
+[ext_resource type="Script" uid="uid://dcallncuf8uhq" path="res://Scripts/Mods/BallMods/base_ball_mod.gd" id="1_l0dyv"]
+
+[node name="BaseBallMod" type="Node2D"]
+script = ExtResource("1_l0dyv")
