@@ -30,6 +30,10 @@ func _ready() -> void:
 	self.position = Vector2(get_viewport_rect().size.x/2, get_viewport_rect().size.y/2)
 	SignalHub.connect_ball_colliding(ball_collided)
 	SignalHub.connect_ball_shot(ball_shot)
+	SignalHub.connect_apply_effect_to_ball_slot(apply_effect_to_ball_slot)
+
+func apply_effect_to_ball_slot(effect : BaseEffect, ball_grid_coords : Vector2i):
+	grid_slot_dict[ball_grid_coords].apply_effect(effect)
 
 func ball_shot(shot_ball, launcher):
 	shot_count += 1

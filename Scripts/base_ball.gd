@@ -8,13 +8,14 @@ signal on_destroy(ball)
 
 @export var color = Color(0,.6,.6,1)
 
+
 var speed : float = 1500
 var movement_direction : Vector2 = Vector2(0,0)
 var active = true
 var collided = false
 
 var types : Array[String] = []
-
+var slot : BallGridSlot
 
 func _ready():
 	sprite.modulate = color
@@ -37,6 +38,10 @@ func set_movement_direction(new_movement_direction : Vector2):
 func add_type(new_type : String, new_color : Color) -> void:
 	types.append(new_type)
 	self.color = new_color
+
+func set_slot(new_slot : BallGridSlot):
+	self.slot = new_slot
+
 
 func get_types() -> Array[String]:
 	return types

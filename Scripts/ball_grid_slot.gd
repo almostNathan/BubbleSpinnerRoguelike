@@ -46,6 +46,7 @@ func set_ball_in_slot(new_ball : BaseBall):
 	ball_position_tween.tween_property(ball_in_slot, 'position', get_current_position(), .01)
 	#ball_in_slot.position  = get_current_position()
 	self.make_unavailable() 
+	ball_in_slot.set_slot(self)
 	
 
 func destroy_slot() -> void:
