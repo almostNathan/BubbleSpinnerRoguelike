@@ -39,8 +39,11 @@ func add_type(new_type : String, new_color : Color) -> void:
 	types.append(new_type)
 	self.color = new_color
 
-func set_slot(new_slot : BallGridSlot):
+func set_slot(new_slot : BallGridSlot) -> void:
 	self.slot = new_slot
+
+func get_grid_position() -> Vector2i:
+	return slot.grid_position
 
 
 func get_types() -> Array[String]:

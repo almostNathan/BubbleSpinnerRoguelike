@@ -72,6 +72,7 @@ func get_types() -> Array[String]:
 		return types + ball_in_slot.get_types()
 	else:
 		return types
+
 func has_ball() -> bool:
 	if ball_in_slot != null:
 		return true
