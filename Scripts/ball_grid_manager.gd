@@ -33,7 +33,7 @@ func _ready() -> void:
 	SignalHub.connect_apply_effect_to_ball_slot(apply_effect_to_ball_slot)
 
 func apply_effect_to_ball_slot(effect : BaseEffect, ball_grid_coords : Vector2i):
-	grid_slot_dict[ball_grid_coords].apply_effect(effect)
+	effect.apply_effect(grid_slot_dict[ball_grid_coords])
 
 func ball_shot(shot_ball, launcher):
 	shot_count += 1
