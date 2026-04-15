@@ -31,6 +31,7 @@ window/size/mode=2
 
 ball=""
 ball_grid_slots=""
+all_mods="Every mod type."
 
 [input]
 
