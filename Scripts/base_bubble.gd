@@ -1,11 +1,11 @@
 extends Node2D
-class_name BaseBall
+class_name BaseBubble
 
-signal on_destroy(ball)
-signal on_remove(ball)
-signal on_bounce(ball, area)
+signal on_destroy(bubble)
+signal on_remove(bubble)
+signal on_bounce(bubble, area)
 
-const BALL_RADIUS = 20
+const BUBBLE_RADIUS = 20
 
 @onready var sprite = $Sprite2D
 @onready var hitbox = $Area2D
@@ -18,15 +18,15 @@ var active = true
 var collided = false
 
 var types : Array[String] = []
-var slot : BallGridSlot
+var slot : BubbleGridSlot
 
 func _ready():
 	sprite.modulate = color
 
-#func set_label(ball_pos: Vector2i):
-	#$Label.text = str(int(ball_pos.x)) + "," + str(int(ball_pos.y))
-func set_label(ball_num : String) -> void:
-	$Label.text = ball_num
+#func set_label(bubble_pos: Vector2i):
+	#$Label.text = str(int(bubble_pos.x)) + "," + str(int(bubble_pos.y))
+func set_label(bubble_num : String) -> void:
+	$Label.text = bubble_num
 
 func _physics_process(delta: float) -> void:
 	if active:
@@ -42,7 +42,7 @@ func add_type(new_type : String, new_color : Color) -> void:
 	types.append(new_type)
 	self.color = new_color
 
-func set_slot(new_slot : BallGridSlot) -> void:
+func set_slot(new_slot : BubbleGridSlot) -> void:
 	self.slot = new_slot
 
 func get_grid_position() -> Vector2i:
@@ -57,15 +57,15 @@ func destroy() -> void:
 	self.on_remove.emit(self)
 	self.queue_free()
 
-func put_ball_in_position(new_position : Vector2):
+func put_bubble_in_position(new_position : Vector2):
 	self.position = new_position
 	self.speed = 0
 
-func score_ball() -> int:
+func score_bubble() -> int:
 	if len(types) != 0:
 		var score_sum = 0
 		for type in types:
-			score_sum += BallTypes.types[type]['value']
+			score_sum += BubbleTypes.types[type]['value']
 		return score_sum
 	else:
 		return 0
@@ -74,16 +74,16 @@ func _on_area_2d_area_entered(area: Area2D) -> void:
 	if area.has_method('bounce'):
 		on_bounce.emit(self, area)
 		area.bounce(self)
-	if area.is_in_group('ball'):
+	if area.is_in_group('bubble'):
 		if !collided:
-			SignalHub.emit_ball_colliding(self,area.get_parent())
+			SignalHub.emit_bubble_colliding(self,area.get_parent())
 			self.speed = 0
 			collided = true
 
 func change_movement_direction(change_vector : Vector2):
 	self.movement_direction *= change_vector
 
-func add_mod(new_mod:BaseBallMod):
+func add_mod(new_mod:BaseBubbleMod):
 	new_mod.attach(self)
 	
 

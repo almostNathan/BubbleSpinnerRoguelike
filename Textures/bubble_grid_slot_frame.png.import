@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dgocb1i6ielpu"
-path="res://.godot/imported/white_ball.png-b5cf3fd2ffd6160eb3fa3e5beff24983.ctex"
+uid="uid://bjdkr54ivvsrv"
+path="res://.godot/imported/bubble_grid_slot_frame.png-7e10bb1e0889fb4396de72cc37e1f98c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/white_ball.png"
-dest_files=["res://.godot/imported/white_ball.png-b5cf3fd2ffd6160eb3fa3e5beff24983.ctex"]
+source_file="res://Textures/bubble_grid_slot_frame.png"
+dest_files=["res://.godot/imported/bubble_grid_slot_frame.png-7e10bb1e0889fb4396de72cc37e1f98c.ctex"]
 
 [params]
 

@@ -18,7 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 SignalHub="*res://Globals/SignalHub.gd"
-BallTypes="*res://Globals/BallTypes.gd"
+BubbleTypes="*res://Globals/BubbleTypes.gd"
 Hud="*res://Globals/HUD/HUD.tscn"
 Util="*res://Globals/Util/util.gd"
 
@@ -30,8 +30,8 @@ window/size/mode=2
 
 [global_group]
 
-ball=""
-ball_grid_slots=""
+bubble=""
+bubble_grid_slots=""
 all_mods="Every mod type."
 
 [input]

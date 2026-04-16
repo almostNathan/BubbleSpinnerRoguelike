@@ -1,5 +1,5 @@
 extends Area2D
 class_name LeftWall
 
-func bounce(ball : BaseBall):
-	ball.change_movement_direction(Vector2(-1,1))
+func bounce(bubble : BaseBubble):
+	bubble.change_movement_direction(Vector2(-1,1))

@@ -1,4 +1,4 @@
-extends BaseBall
+extends BaseBubble
 class_name StartPoint
 
 

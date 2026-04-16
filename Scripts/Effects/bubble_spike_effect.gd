@@ -1,7 +1,7 @@
 extends BaseEffect
-class_name SpikeBallEffect
+class_name SpikeBubbleEffect
 
-var grid_slot : BallGridSlot
+var grid_slot : BubbleGridSlot
 var target_relative_position : Vector2i
 @onready var sprite : Sprite2D = $Sprite
 var sprite_pos : Vector2 = Vector2(0,0)
@@ -9,10 +9,10 @@ var sprite_pos : Vector2 = Vector2(0,0)
 func _ready():
 	self.sprite.position = sprite_pos
 
-func apply_effect(new_grid_slot : BallGridSlot) -> void:
-	if new_grid_slot.has_ball() and randf() > .5:
+func apply_effect(new_grid_slot : BubbleGridSlot) -> void:
+	if new_grid_slot.has_bubble() and randf() > .5:
 		self.grid_slot = new_grid_slot
-		print("spike_ball_effect applied")
+		print("spike_bubble_effect applied")
 		self.reparent(grid_slot.get_parent())
 		##tween to new position
 		var position_tween = get_tree().create_tween()

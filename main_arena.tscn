@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://b8jcv8ufy54ub" path="res://Scripts/left_wall.gd" id="4_kl8a0"]
 [ext_resource type="Script" uid="uid://ctnyf7ugw8rbd" path="res://Scripts/right_wall.gd" id="5_3ienu"]
 [ext_resource type="Script" uid="uid://dsnj6dg3ppgl" path="res://Scripts/bottom_wall.gd" id="6_d4wu6"]
-[ext_resource type="PackedScene" uid="uid://btgl6q2mkb7vt" path="res://Scenes/ball_grid_manager.tscn" id="7_yilo4"]
+[ext_resource type="PackedScene" uid="uid://btgl6q2mkb7vt" path="res://Scenes/bubble_grid_manager.tscn" id="7_yilo4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yajwo"]
 size = Vector2(20, 1140)
@@ -48,5 +48,5 @@ script = ExtResource("6_d4wu6")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BottomWall"]
 shape = SubResource("RectangleShape2D_3ienu")
 
-[node name="BallGridManager" parent="." instance=ExtResource("7_yilo4")]
+[node name="BubbleGridManager" parent="." instance=ExtResource("7_yilo4")]
 position = Vector2(600, 450)
