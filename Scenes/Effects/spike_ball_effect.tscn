@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://chihu6g0wj5c7"]
 
 [ext_resource type="Script" uid="uid://6vbp86ajowae" path="res://Scripts/Effects/ball_spike_effect.gd" id="1_rnh6l"]
-[ext_resource type="Texture2D" uid="uid://cu7ielvqjf24s" path="res://Assets/Textures/triangle-png-42424.png" id="2_nxlgi"]
+[ext_resource type="Texture2D" uid="uid://dfnnb7xvnsjmc" path="res://Assets/Textures/triangle_right.png" id="2_nxlgi"]
 
 [node name="BallSpikeEffect" type="Node2D"]
 z_index = 10

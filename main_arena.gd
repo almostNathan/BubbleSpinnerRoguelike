@@ -3,9 +3,9 @@ class_name MainArena
 
 @export var my_name : String
 
-@onready var launcher = $Launcher
+@onready var launcher : Launcher = $Launcher
 @onready var ball_grid_manager : BallGridManager = $BallGridManager
-@onready var start_point = $StartPoint
+@onready var start_point : StartPoint = $StartPoint
 
 func _ready() -> void:
 	#ball_grid_manager.position = 

@@ -16,6 +16,6 @@ func emit_ball_shot(_shot_ball, _launcher):
 	ball_shot.emit(_shot_ball, _launcher)
 
 func connect_apply_effect_to_ball_slot(callable : Callable):
-	self.ball_shot.connect(callable)
+	self.apply_effect_to_ball_slot.connect(callable)
 func emit_apply_effect_to_ball_slot(_effect_callable, _ball_slot_coords):
-	ball_shot.emit(_effect_callable, _ball_slot_coords)
+	apply_effect_to_ball_slot.emit(_effect_callable, _ball_slot_coords)

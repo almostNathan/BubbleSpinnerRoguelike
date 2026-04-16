@@ -4,22 +4,10 @@ class_name BallGridManager
 const BALL_SIZE : int = 40
 const GRID_SIZE_X : int = 40
 const GRID_SIZE_Y : int = 20
-const RELATIVE_UP_LEFT : Vector2i = Vector2i(-1, -1)
-const RELATIVE_UP_RIGHT : Vector2i = Vector2i(1, -1)
-const RELATIVE_RIGHT : Vector2i = Vector2i(2, 0)
-const RELATIVE_DOWN_RIGHT : Vector2i = Vector2i(1, 1)
-const RELATIVE_DOWN_LEFT : Vector2i = Vector2i(-1, 1)
-const RELATIVE_LEFT : Vector2i = Vector2i(-2, 0)
-const NEIGHBORS : Array[Vector2i] = [
-		RELATIVE_RIGHT, RELATIVE_LEFT,
-		RELATIVE_UP_RIGHT, RELATIVE_UP_LEFT,
-		RELATIVE_DOWN_RIGHT, RELATIVE_DOWN_LEFT
-]
 
 var center_point : Vector2
 var grid_slot_dict : Dictionary[Vector2i, BallGridSlot]
 var shot_count : int = 0
-
 
 @onready var start_point : StartPoint = $StartPoint
 
@@ -39,10 +27,18 @@ func ball_shot(shot_ball, launcher):
 	shot_count += 1
 	if shot_count % 10 == 0:
 		await get_tree().create_timer(.5).timeout
-		add_balls(10)
+		#add_balls(10)
+
+func set_children_scene_root(node):
+	for child in node.get_children():
+		set_children_scene_root(child)
+		child.set_owner(get_tree().edited_scene_root)
 
 func ball_collided(shot_ball: BaseBall, collided_ball: BaseBall):
 	shot_ball.reparent(self)
+	shot_ball.set_owner(get_tree().edited_scene_root)
+	set_children_scene_root(shot_ball)
+	
 	#shot_ball.call_deferred("reparent", self, true)
 	var closest_position = grid_spot_closest_to_position(shot_ball.position)
 	grid_slot_dict[closest_position].set_ball_in_slot(shot_ball)
@@ -113,7 +109,7 @@ func set_up_grid_locations():
 				grid_slot_dict[Vector2i(x,y)] = new_ball_grid_slot
 	grid_slot_dict[Vector2i(0,0)].set_ball_in_slot(start_point)
 	update_available_positions()
-	add_balls(40)
+	add_balls(20)
 
 
 func add_balls(num_balls : int):
@@ -129,8 +125,10 @@ func add_balls(num_balls : int):
 		]
 	for i in range(num_balls):
 		var new_ball = preload("res://Scenes/base_ball.tscn").instantiate()
-		var selected_type = types.pick_random()
-		new_ball.add_type(selected_type[0], selected_type[1])
+		if randf() > .5:
+			new_ball.add_mod(preload("res://Scenes/Mods/BallMods/spike_ball_mod.tscn").instantiate())
+		var new_type : String = BallTypes.types.keys().pick_random()
+		new_ball.add_type(new_type, BallTypes.types[new_type]['color'])
 		new_ball.position = Vector2(300, 0).rotated(randf()*2*PI) + self.position
 		new_ball.aim_at(self.global_position)
 		self.add_sibling(new_ball)
@@ -186,7 +184,7 @@ func delete_islands() -> void:
 			continue
 		if grid_slot_dict[current].has_ball():
 			group.append(current)
-			for offset in NEIGHBORS:
+			for offset in Util.RELATIVE_POSITIONS_ARRAY:
 				var neighbor = current + offset
 				if not visited.has(neighbor): 
 					queue.append(neighbor)
@@ -222,7 +220,7 @@ func get_connected_group_pos(start_pos: Vector2i) -> Array[Vector2i]:
 		if grid_slot_dict[current].get_types().any(has_type):
 			group.append(current)
 
-			for offset in NEIGHBORS:
+			for offset in Util.RELATIVE_POSITIONS_ARRAY:
 				var neighbor = current + offset
 				if not visited.has(neighbor): 
 					queue.append(neighbor)

@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 SignalHub="*res://Globals/SignalHub.gd"
 BallTypes="*res://Globals/BallTypes.gd"
 Hud="*res://Globals/HUD/HUD.tscn"
+Util="*res://Globals/Util/util.gd"
 
 [display]
 

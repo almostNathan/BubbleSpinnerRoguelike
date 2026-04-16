@@ -17,7 +17,6 @@ var movement_direction : Vector2 = Vector2(0,0)
 var active = true
 var collided = false
 
-
 var types : Array[String] = []
 var slot : BallGridSlot
 
@@ -49,11 +48,11 @@ func set_slot(new_slot : BallGridSlot) -> void:
 func get_grid_position() -> Vector2i:
 	return slot.grid_position
 
-
 func get_types() -> Array[String]:
 	return types
 
 func destroy() -> void:
+	await get_tree().create_timer(.2).timeout
 	self.on_destroy.emit(self)
 	self.on_remove.emit(self)
 	self.queue_free()
