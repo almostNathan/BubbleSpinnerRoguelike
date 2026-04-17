@@ -5,7 +5,7 @@ class_name MainArena
 
 @onready var launcher : Launcher = $Launcher
 @onready var bubble_grid_manager : BubbleGridManager = $BubbleGridManager
-@onready var start_point : StartPoint = $StartPoint
+#@onready var start_point : StartPoint = $StartPoint
 
 func _ready() -> void:
 	#bubble_grid_manager.position = 

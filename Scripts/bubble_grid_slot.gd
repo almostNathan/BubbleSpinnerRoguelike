@@ -15,7 +15,6 @@ func setup(new_grid_position, new_position) -> void:
 	self.grid_position = new_grid_position
 	self.position = new_position
 	self.center_point = center_point
-	$Label.text = str(self.grid_position).substr(1,str(self.grid_position).find(')')-1)
 	
 func get_current_position() -> Vector2:
 	return self.position
@@ -39,7 +38,12 @@ func set_bubble_in_slot(new_bubble : BaseBubble):
 	#bubble_in_slot.position  = get_current_position()
 	self.make_unavailable() 
 	bubble_in_slot.set_slot(self)
-	
+
+func clear_slot() -> void:
+	if bubble_in_slot:
+		bubble_in_slot.clear() 
+	bubble_in_slot = null
+	self.make_available()
 
 func destroy_slot() -> void:
 	if bubble_in_slot:
@@ -81,11 +85,7 @@ func make_available():
 	if !bubble_in_slot:
 		is_available = true
 		is_active = true
-		#$Sprite2D.visible = true
-		#$Label.visible = true
 
 func make_unavailable():
 	is_available = false
-	$Sprite2D.visible = false
-	$Label.visible = false
 	

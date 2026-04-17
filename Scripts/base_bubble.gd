@@ -13,6 +13,7 @@ const BUBBLE_RADIUS = 20
 @export var color = Color(0,.6,.6,1)
 
 var speed : float = 1500
+var cur_speed : float = speed
 var movement_direction : Vector2 = Vector2(0,0)
 var active = true
 var collided = false
@@ -30,7 +31,7 @@ func set_label(bubble_num : String) -> void:
 
 func _physics_process(delta: float) -> void:
 	if active:
-		self.position += movement_direction * speed * delta
+		self.position += movement_direction * cur_speed * delta
 
 func aim_at(target_position : Vector2):
 	self.movement_direction = self.global_position.direction_to(target_position)
@@ -51,15 +52,21 @@ func get_grid_position() -> Vector2i:
 func get_types() -> Array[String]:
 	return types
 
+func clear() -> void:
+	await get_tree().create_timer(.2).timeout
+	self.on_remove.emit(self)
+	self.queue_free()
+
 func destroy() -> void:
 	await get_tree().create_timer(.2).timeout
+	SignalHub.emit_bubble_destroyed(self)
 	self.on_destroy.emit(self)
 	self.on_remove.emit(self)
 	self.queue_free()
 
 func put_bubble_in_position(new_position : Vector2):
 	self.position = new_position
-	self.speed = 0
+	self.cur_speed = 0
 
 func score_bubble() -> int:
 	if len(types) != 0:
@@ -76,8 +83,9 @@ func _on_area_2d_area_entered(area: Area2D) -> void:
 		area.bounce(self)
 	if area.is_in_group('bubble'):
 		if !collided:
-			SignalHub.emit_bubble_colliding(self,area.get_parent())
-			self.speed = 0
+			SignalHub.emit_bubble_colliding.call_deferred(self, area.get_parent())
+			#SignalHub.emit_bubble_colliding(self,area.get_parent())
+			self.cur_speed = 0
 			collided = true
 
 func change_movement_direction(change_vector : Vector2):
@@ -85,7 +93,6 @@ func change_movement_direction(change_vector : Vector2):
 
 func add_mod(new_mod:BaseBubbleMod):
 	new_mod.attach(self)
-	
 
 func deactivate():
 	active = false

@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cxb2ff2vkrnpq"]
 
-[ext_resource type="Script" uid="uid://bvg1fga6lepcp" path="res://Scripts/Mods/BubbleMods/spike_bubble_mod.gd" id="1_5nlab"]
+[ext_resource type="Script" uid="uid://bvg1fga6lepcp" path="res://Scripts/Mods/BallMods/spike_bubble_mod.gd" id="1_5nlab"]
 [ext_resource type="Texture2D" uid="uid://cu7ielvqjf24s" path="res://Assets/Textures/triangle-png-42424.png" id="2_0vt0f"]
 
 [node name="SpikeBubbleMod" type="Node2D"]

@@ -19,6 +19,11 @@ func reload_current_queue() -> void:
 		var new_type : String = BubbleTypes.types.keys().pick_random()
 		new_bubble.add_type(new_type, BubbleTypes.types[new_type]['color'])
 		current_queue.append(new_bubble)
-	self.add_mod_to_all_bubbles(preload("res://Scenes/Mods/BubbleMods/spike_bubble_mod.tscn").instantiate())
+	add_mod_to_all_bubbles_random(preload("res://Scenes/Mods/BubbleMods/spike_bubble_mod.tscn").instantiate(), .5)
+
+func add_mod_to_all_bubbles_random(new_mod : BaseBubbleMod, chance_to_add : float):
+	for bubble in current_queue:
+		if randf() < chance_to_add:
+			bubble.add_mod(new_mod.duplicate())
 	
 	

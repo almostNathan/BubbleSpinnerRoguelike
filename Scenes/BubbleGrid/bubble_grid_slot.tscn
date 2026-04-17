@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cmrw4tw3shjtt"]
+
+[ext_resource type="Script" uid="uid://dwdco242i6cfe" path="res://Scripts/bubble_grid_slot.gd" id="1_mks3e"]
+
+[node name="BubbleGridSlot" type="Node2D" groups=["bubble_grid_slots"]]
+script = ExtResource("1_mks3e")

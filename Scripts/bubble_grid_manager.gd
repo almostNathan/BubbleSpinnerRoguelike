@@ -8,17 +8,20 @@ const GRID_SIZE_Y : int = 20
 var center_point : Vector2
 var grid_slot_dict : Dictionary[Vector2i, BubbleGridSlot]
 var shot_count : int = 0
+var total_rotation : float = 0
 
 @onready var start_point : StartPoint = $StartPoint
 
 var score_number_scene : PackedScene = preload("res://Scenes/UI/score_number.tscn")
-var bubble_grid_slot_scene : PackedScene = preload("res://Scenes/bubble_grid_slot.tscn")
+var bubble_grid_slot_scene : PackedScene = preload("res://Scenes/BubbleGrid/bubble_grid_slot.tscn")
+var center_grid_slot_scene : PackedScene = preload("res://Scenes/BubbleGrid/center_bubble_grid_slot.tscn")
 
 func _ready() -> void:
 	self.position = Vector2(get_viewport_rect().size.x/2, get_viewport_rect().size.y/2)
 	SignalHub.connect_bubble_colliding(bubble_collided)
 	SignalHub.connect_bubble_shot(bubble_shot)
 	SignalHub.connect_apply_effect_to_bubble_slot(apply_effect_to_bubble_slot)
+	SignalHub.connect_bubble_destroyed(bubble_destroyed)
 
 func apply_effect_to_bubble_slot(effect : BaseEffect, bubble_grid_coords : Vector2i):
 	effect.apply_effect(grid_slot_dict[bubble_grid_coords])
@@ -39,7 +42,6 @@ func bubble_collided(shot_bubble: BaseBubble, collided_bubble: BaseBubble):
 	shot_bubble.set_owner(get_tree().edited_scene_root)
 	set_children_scene_root(shot_bubble)
 	
-	#shot_bubble.call_deferred("reparent", self, true)
 	var closest_position = grid_spot_closest_to_position(shot_bubble.position)
 	grid_slot_dict[closest_position].set_bubble_in_slot(shot_bubble)
 	rotate_bubble_grid(shot_bubble, collided_bubble)
@@ -57,13 +59,17 @@ func rotate_bubble_grid(shot_bubble : BaseBubble, collided_bubble : BaseBubble):
 	var direction_to_center : Vector2 = shot_bubble.global_position.direction_to(self.position)
 	var force_angle : float = direction_to_center.angle_to(shot_bubble.movement_direction)
 	var force_value : float = shot_bubble.speed / 1500
+	var rotation_value : float = (-sin(force_angle) * force_value)
+	self.track_rotation(rotation_value)
 	var rotation_tween : Tween = self.create_tween()
 	rotation_tween.set_trans(Tween.TRANS_QUART)
 	rotation_tween.set_ease(Tween.EASE_OUT)
 	#calculates the difference in angle of shot bubble and the angle to the center point.
 	#Force is greatest when they are at 90/270 degrees and least at 0/180 -> sin
-	rotation_tween.tween_property(self, 'rotation', self.rotation + (-sin(force_angle) * force_value), 1)
+	rotation_tween.tween_property(self, 'rotation', self.rotation + rotation_value, 1)
 
+func track_rotation(rotation_value : float):
+	self.total_rotation += rotation_value
 
 func score_and_clear(closest_position : Vector2i) -> void:
 	var connected_group_pos = get_connected_group_pos(closest_position)
@@ -75,7 +81,7 @@ func score_and_clear(closest_position : Vector2i) -> void:
 	add_sibling(score_number)
 	score_number.set_values_and_animate(score, grid_slot_dict[closest_position].global_position)
 	Hud.change_score(score)
-	clear_slots(connected_group_pos)
+	destroy_slots(connected_group_pos)
 
 
 func grid_spot_closest_to_position(from_position : Vector2):
@@ -102,12 +108,20 @@ func set_up_grid_locations():
 					x_offset = 0
 				else:
 					x_offset =  x * BUBBLE_SIZE / 2.0
-				var new_relative_position = Vector2(x + x_offset  , y * (BUBBLE_SIZE/2.0 * sqrt(3)))
-				var new_bubble_grid_slot : BubbleGridSlot = bubble_grid_slot_scene.instantiate()
-				new_bubble_grid_slot.setup(Vector2i(x,y), new_relative_position)
-				self.add_child(new_bubble_grid_slot)
-				grid_slot_dict[Vector2i(x,y)] = new_bubble_grid_slot
-	grid_slot_dict[Vector2i(0,0)].set_bubble_in_slot(start_point)
+				if x == 0 and y == 0:
+					print("bubblegridmanager createing center")
+					var new_relative_position = Vector2(x + x_offset  , y * (BUBBLE_SIZE/2.0 * sqrt(3)))
+					var new_bubble_grid_slot : CenterBubbleGridSlot = center_grid_slot_scene.instantiate()
+					new_bubble_grid_slot.setup(Vector2i(x,y), new_relative_position)
+					self.add_child(new_bubble_grid_slot)
+					grid_slot_dict[Vector2i(x,y)] = new_bubble_grid_slot
+					grid_slot_dict[Vector2i(0,0)].set_bubble_in_slot(start_point)
+				else:
+					var new_relative_position = Vector2(x + x_offset  , y * (BUBBLE_SIZE/2.0 * sqrt(3)))
+					var new_bubble_grid_slot : BubbleGridSlot = bubble_grid_slot_scene.instantiate()
+					new_bubble_grid_slot.setup(Vector2i(x,y), new_relative_position)
+					self.add_child(new_bubble_grid_slot)
+					grid_slot_dict[Vector2i(x,y)] = new_bubble_grid_slot
 	update_available_positions()
 	add_bubbles(20)
 
@@ -125,8 +139,6 @@ func add_bubbles(num_bubbles : int):
 		]
 	for i in range(num_bubbles):
 		var new_bubble = preload("res://Scenes/base_bubble.tscn").instantiate()
-		if randf() > .5:
-			new_bubble.add_mod(preload("res://Scenes/Mods/BubbleMods/spike_bubble_mod.tscn").instantiate())
 		var new_type : String = BubbleTypes.types.keys().pick_random()
 		new_bubble.add_type(new_type, BubbleTypes.types[new_type]['color'])
 		new_bubble.position = Vector2(300, 0).rotated(randf()*2*PI) + self.position
@@ -164,8 +176,11 @@ func update_available_positions():
 
 func clear_slots(slot_positions : Array[Vector2i]):
 	for slot_position in slot_positions:
-		grid_slot_dict[slot_position].destroy_slot()
+		grid_slot_dict[slot_position].clear_slot()
 
+func destroy_slots(slot_positions : Array[Vector2i]):
+	for slot_position in slot_positions:
+		grid_slot_dict[slot_position].destroy_slot()
 
 func delete_islands() -> void:
 	var start_pos : Vector2i = Vector2i(0,0)
@@ -194,6 +209,8 @@ func delete_islands() -> void:
 		island_slots.erase(slot)
 	clear_slots(island_slots)
 
+func bubble_destroyed(destroyed_bubble : BaseBubble) -> void:
+	delete_islands()
 
 func get_connected_group_pos(start_pos: Vector2i) -> Array[Vector2i]:
 	if not grid_slot_dict.has(start_pos):

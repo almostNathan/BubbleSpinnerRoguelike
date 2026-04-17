@@ -1,0 +1,37 @@
+[gd_scene load_steps=4 format=3 uid="uid://c1qndh8emvug5"]
+
+[ext_resource type="Script" uid="uid://c3r48vhkhgntb" path="res://Scripts/UI/rotation_tracker.gd" id="1_dfl8v"]
+[ext_resource type="Texture2D" uid="uid://deli5e56vprxi" path="res://Assets/Textures/red_circle.png" id="2_oultm"]
+[ext_resource type="Texture2D" uid="uid://cia4anrtoi63q" path="res://Assets/Textures/green_circle.png" id="4_l202u"]
+
+[node name="RotationTracker" type="Node2D"]
+script = ExtResource("1_dfl8v")
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 763.0
+offset_top = 377.0
+offset_right = 4255.0
+offset_bottom = 3869.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.1, 0.1)
+size_flags_horizontal = 4
+fill_mode = 4
+texture_under = ExtResource("2_oultm")
+texture_progress = ExtResource("4_l202u")
+
+[node name="HSlider" type="HSlider" parent="."]
+offset_left = 762.0
+offset_top = 753.0
+offset_right = 1120.0
+offset_bottom = 769.0
+min_value = -100.0
+max_value = 200.0
+tick_count = 10
+
+[connection signal="value_changed" from="HSlider" to="." method="_on_h_slider_value_changed"]
