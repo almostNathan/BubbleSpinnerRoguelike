@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://b75l6lph5nhge"]
+[gd_scene load_steps=11 format=3 uid="uid://b75l6lph5nhge"]
 
 [ext_resource type="Script" uid="uid://bduy347mjjq8q" path="res://main_arena.gd" id="1_r7ygb"]
 [ext_resource type="PackedScene" uid="uid://d2aoyrb284655" path="res://Scenes/launcher.tscn" id="3_yajwo"]
 [ext_resource type="Script" uid="uid://b8jcv8ufy54ub" path="res://Scripts/left_wall.gd" id="4_kl8a0"]
 [ext_resource type="Script" uid="uid://ctnyf7ugw8rbd" path="res://Scripts/right_wall.gd" id="5_3ienu"]
 [ext_resource type="Script" uid="uid://dsnj6dg3ppgl" path="res://Scripts/bottom_wall.gd" id="6_d4wu6"]
+[ext_resource type="PackedScene" uid="uid://c1qndh8emvug5" path="res://Scenes/UI/rotation_tracker.tscn" id="7_2rdfv"]
 [ext_resource type="PackedScene" uid="uid://btgl6q2mkb7vt" path="res://Scenes/BubbleGrid/bubble_grid_manager.tscn" id="7_yilo4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yajwo"]
@@ -23,6 +24,8 @@ script = ExtResource("1_r7ygb")
 offset_right = 1920.0
 offset_bottom = 1080.0
 color = Color(0.329832, 0.476577, 0.885455, 1)
+
+[node name="RotationTracker" parent="." instance=ExtResource("7_2rdfv")]
 
 [node name="Launcher" parent="." instance=ExtResource("3_yajwo")]
 position = Vector2(600, 24)

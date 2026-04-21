@@ -70,7 +70,8 @@ func rotate_bubble_grid(shot_bubble : BaseBubble, collided_bubble : BaseBubble):
 
 func track_rotation(rotation_value : float):
 	self.total_rotation += rotation_value
-
+	SignalHub.emit_rotate_bubble_grid(self, rotation_value, total_rotation)
+	
 func score_and_clear(closest_position : Vector2i) -> void:
 	var connected_group_pos = get_connected_group_pos(closest_position)
 	var score = 0

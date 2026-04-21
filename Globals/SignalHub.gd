@@ -4,6 +4,13 @@ signal bubble_colliding(shot_bubble : BaseBubble, collided_bubble : BaseBubble)
 signal bubble_shot(shot_bubble : BaseBubble, launcher : Launcher)
 signal bubble_destroyed(destroyed_bubble : BaseBubble)
 signal apply_effect_to_bubble_slot(effect : BaseEffect, bubble_slot_coords : Vector2i)
+signal rotate_bubble_grid(bubble_grid : BubbleGridManager, rotation_change : float, new_rotation_value : float)
+
+## Bubble Destroyed
+func connect_rotate_bubble_grid(callable : Callable):
+	self.rotate_bubble_grid.connect(callable)
+func emit_rotate_bubble_grid(_bubble_grid, _rotation_change, _new_rotation_value):
+	rotate_bubble_grid.emit(_bubble_grid, _rotation_change, _new_rotation_value)
 
 ## Bubble Destroyed
 func connect_bubble_destroyed(callable : Callable):
