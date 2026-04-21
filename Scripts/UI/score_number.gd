@@ -4,8 +4,22 @@ class_name ScoreNumber
 @onready var label_container = $Container
 @onready var label = $Container/Label
 
+var score_value = 0
 
-func set_values_and_animate(value, pos):
+func update() -> void:
+	label.text = str(score_value)
+
+func change_color(new_color : Color) -> void:
+	label.modulate = new_color
+
+func animate(pos) -> void:
+	update()
+	self.global_position = pos
+	var fade_tween = get_tree().create_tween()
+	fade_tween.tween_property(label_container, "modulate:a", 0, 1)
+	fade_tween.finished.connect(remove)
+	
+func set_values_and_animate(value, pos) -> void:
 	label.text = str(value)
 	self.global_position = pos
 	var fade_tween = get_tree().create_tween()

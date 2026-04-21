@@ -1,11 +1,13 @@
 extends Node2D
 class_name RotationTracker
+#TODO - IDEAS
+#
+@onready var rotation_progress_bar = $RotationProgressBar
+@onready var multiplier_label = $MultiplierLabel
 
-@onready var rotation_tracker = $TextureProgressBar
-
-const MAX_VALUE = 2 * PI
+const MAX_VALUE : float = 2 * PI
 const LAYER_COLORS: Array[Color] = [
-	Color("#4fc3f7"),  # sky blue
+	Color("#2fa3ff"),  # sky blue
 	Color("#81c784"),  # soft green
 	Color("#ffb74d"),  # warm amber
 	Color("#f06292"),  # rose pink
@@ -18,41 +20,44 @@ const LAYER_COLORS: Array[Color] = [
 ]
 
 var value_tween : Tween
-var total_value : float = 0
-var shown_value : float = 0
-var current_layer = 0
+var total_rotation : float = 0
+var current_layer : int  = -1
 
 func _ready() -> void:
-	rotation_tracker.max_value = 2 * PI 
 	self.position = Vector2(get_viewport_rect().size.x/2, get_viewport_rect().size.y/2)
 	SignalHub.connect_rotate_bubble_grid(change_value)
+	SignalHub.connect_scoring_bubbles(on_scoring_bubbles)
 	set_layers()
 	
 func _physics_process(delta: float) -> void:
-	var layer = floor(total_value / MAX_VALUE)
-	if layer != current_layer:
-		current_layer = layer
-		set_layers()
-	if rotation_tracker.value > MAX_VALUE:
-		rotation_tracker.value = 0
+	self.rotation_progress_bar.value = fmod(self.total_rotation, MAX_VALUE)
+	set_layers()
 
-func change_value(bubble_grid : BubbleGridManager, rotation_change : float, new_rotation_value : float) -> void:
-	total_value = new_rotation_value
-	#shown_value = fmod(total_value, MAX_VALUE)
-	value_tween = get_tween()
-	value_tween.set_trans(Tween.TRANS_QUART)
-	value_tween.set_ease(Tween.EASE_OUT)
-	value_tween.tween_property(rotation_tracker, 'value', total_value, 1)
-	#value_tween.finished.connect(value_tween.kill)
+func on_scoring_bubbles(score_number : ScoreNumber):
+	score_number.score_value = score_number.score_value *  (current_layer+1)
+	score_number.change_color(LAYER_COLORS[current_layer%9])
+	
+
+func change_value(bubble_grid : BubbleGridManager, rotation_change : float) -> void:
+	self.total_rotation += abs(rotation_change)
+
 
 func set_layers():
 	#TODO based on the current value, determine what layers we should be using and truncate the value
-	rotation_tracker.tint_under = LAYER_COLORS[current_layer]
-	rotation_tracker.tint_progress = LAYER_COLORS[current_layer+1]
-	pass
+	var layer = floor(abs(total_rotation) / MAX_VALUE)
+	if layer != current_layer:
+		current_layer = layer
+		var color_count = len(LAYER_COLORS) - 1
+		rotation_progress_bar.tint_under = LAYER_COLORS[current_layer%color_count]
+		rotation_progress_bar.tint_progress = LAYER_COLORS[(current_layer%color_count)+1]
+		multiplier_label.text = "x"+ str(current_layer+1)
 
 
 func get_tween() -> Tween:
 	if value_tween:
 		value_tween.kill()
 	return get_tree().create_tween()
+
+
+func _on_h_slider_value_changed(value: float) -> void:
+	rotation_progress_bar.value = value

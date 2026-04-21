@@ -12,8 +12,9 @@ const BUBBLE_RADIUS = 20
 
 @export var color = Color(0,.6,.6,1)
 
-var speed : float = 1500
+var speed : float = Util.base_values['base_bubble_speed']
 var cur_speed : float = speed
+var weight : float = Util.base_values['base_bubble_weight']
 var movement_direction : Vector2 = Vector2(0,0)
 var active = true
 var collided = false
@@ -23,7 +24,7 @@ var slot : BubbleGridSlot
 
 func _ready():
 	sprite.modulate = color
-
+	#weight = 10
 #func set_label(bubble_pos: Vector2i):
 	#$Label.text = str(int(bubble_pos.x)) + "," + str(int(bubble_pos.y))
 func set_label(bubble_num : String) -> void:

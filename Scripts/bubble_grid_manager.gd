@@ -1,6 +1,7 @@
 extends Node2D
 class_name BubbleGridManager
 
+
 const BUBBLE_SIZE : int = 40
 const GRID_SIZE_X : int = 40
 const GRID_SIZE_Y : int = 20
@@ -9,12 +10,19 @@ var center_point : Vector2
 var grid_slot_dict : Dictionary[Vector2i, BubbleGridSlot]
 var shot_count : int = 0
 var total_rotation : float = 0
+var last_rotation_value : float = 0
 
 @onready var start_point : StartPoint = $StartPoint
 
 var score_number_scene : PackedScene = preload("res://Scenes/UI/score_number.tscn")
 var bubble_grid_slot_scene : PackedScene = preload("res://Scenes/BubbleGrid/bubble_grid_slot.tscn")
 var center_grid_slot_scene : PackedScene = preload("res://Scenes/BubbleGrid/center_bubble_grid_slot.tscn")
+
+func _physics_process(delta: float) -> void:
+	var rotation_change = self.rotation - last_rotation_value
+	SignalHub.emit_rotate_bubble_grid(self, rotation_change)
+	last_rotation_value = self.rotation
+	
 
 func _ready() -> void:
 	self.position = Vector2(get_viewport_rect().size.x/2, get_viewport_rect().size.y/2)
@@ -58,19 +66,19 @@ func rotate_bubble_grid(shot_bubble : BaseBubble, collided_bubble : BaseBubble):
 	# factoring in total weight of the current grid and the weight of the new bubble
 	var direction_to_center : Vector2 = shot_bubble.global_position.direction_to(self.position)
 	var force_angle : float = direction_to_center.angle_to(shot_bubble.movement_direction)
-	var force_value : float = shot_bubble.speed / 1500
+	var force_value : float = shot_bubble.speed / 1500 * shot_bubble.weight
 	var rotation_value : float = (-sin(force_angle) * force_value)
 	self.track_rotation(rotation_value)
 	var rotation_tween : Tween = self.create_tween()
 	rotation_tween.set_trans(Tween.TRANS_QUART)
 	rotation_tween.set_ease(Tween.EASE_OUT)
+	var rotation_duration : float = clamp((shot_bubble.weight - 1) / 2, 1, 3)
 	#calculates the difference in angle of shot bubble and the angle to the center point.
 	#Force is greatest when they are at 90/270 degrees and least at 0/180 -> sin
-	rotation_tween.tween_property(self, 'rotation', self.rotation + rotation_value, 1)
+	rotation_tween.tween_property(self, 'rotation', self.rotation + rotation_value, rotation_duration)
 
 func track_rotation(rotation_value : float):
 	self.total_rotation += rotation_value
-	SignalHub.emit_rotate_bubble_grid(self, rotation_value, total_rotation)
 	
 func score_and_clear(closest_position : Vector2i) -> void:
 	var connected_group_pos = get_connected_group_pos(closest_position)
@@ -80,8 +88,10 @@ func score_and_clear(closest_position : Vector2i) -> void:
 	
 	var score_number :ScoreNumber = score_number_scene.instantiate()
 	add_sibling(score_number)
-	score_number.set_values_and_animate(score, grid_slot_dict[closest_position].global_position)
-	Hud.change_score(score)
+	score_number.score_value = score
+	SignalHub.emit_scoring_bubbles(score_number)
+	score_number.animate(grid_slot_dict[closest_position].global_position)
+	Hud.change_score(score_number.score_value)
 	destroy_slots(connected_group_pos)
 
 

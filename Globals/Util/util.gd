@@ -14,3 +14,9 @@ const RELATIVE_POSITIONS_ARRAY : Array[Vector2i] = [
 	RELATIVE_LEFT,
 	RELATIVE_UP_LEFT,
 	RELATIVE_UP_RIGHT]
+
+
+var base_values = {
+	"base_bubble_speed" : 1500,
+	"base_bubble_weight" : 1
+}
