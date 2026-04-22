@@ -80,6 +80,7 @@ func score_bubble() -> int:
 
 func _on_area_2d_area_entered(area: Area2D) -> void:
 	if area.has_method('bounce'):
+		#TODO change to global signal and have all walls listen to the signal
 		on_bounce.emit(self, area)
 		area.bounce(self)
 	if area.is_in_group('bubble'):
@@ -100,3 +101,8 @@ func deactivate():
 
 func activate():
 	active = true
+
+func disable():
+	$Area2D/CollisionShape2D.disabled = true
+func enable():
+	$Area2D/CollisionShape2D.disabled = false

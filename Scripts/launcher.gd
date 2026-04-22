@@ -21,6 +21,7 @@ func reload() -> void:
 	new_bubble.position = self.position
 	new_bubble.set_label(str(shot_bubbles))
 	new_bubble.deactivate()
+	new_bubble.disable()
 	self.add_sibling(new_bubble)
 	current_bubble = new_bubble
 
@@ -32,6 +33,8 @@ func fire_launcher():
 	if current_bubble != null:
 		current_bubble.set_movement_direction(current_bubble.global_position.direction_to(get_global_mouse_position()))
 		current_bubble.activate()
+		current_bubble.enable()
+		
 		SignalHub.emit_bubble_shot(current_bubble, self)
 		#shot_bubbles.append(current_bubble)
 		current_bubble = null
