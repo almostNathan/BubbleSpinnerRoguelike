@@ -18,7 +18,7 @@ func add_spike_effects():
 		spike_effect.rotate(float(i)/float(num_spikes) * 2 * PI)
 		self.bubble.add_child(spike_effect)
 
-func trigger_spikes(target_bubble : BaseBubble) -> void:
+func trigger_spikes(_target_bubble : BaseBubble) -> void:
 	if self.bubble.slot == null:
 		pass
 	else:

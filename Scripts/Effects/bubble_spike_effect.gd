@@ -15,8 +15,7 @@ func apply_effect(new_grid_slot : BubbleGridSlot) -> void:
 	var position_tween = get_tree().create_tween()
 	position_tween.tween_property(sprite, 'position:x', 50, .2)
 	position_tween.finished.connect(end_effect)
-	
-	
+
 func end_effect():
 	self.grid_slot.destroy_slot()
 	queue_free()

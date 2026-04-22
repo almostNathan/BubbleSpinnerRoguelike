@@ -29,7 +29,7 @@ func _ready() -> void:
 	SignalHub.connect_scoring_bubbles(on_scoring_bubbles)
 	set_layers()
 	
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	self.rotation_progress_bar.value = fmod(self.total_rotation, MAX_VALUE)
 	set_layers()
 
@@ -38,7 +38,7 @@ func on_scoring_bubbles(score_number : ScoreNumber):
 	score_number.change_color(LAYER_COLORS[current_layer%9])
 	
 
-func change_value(bubble_grid : BubbleGridManager, rotation_change : float) -> void:
+func change_value(_bubble_grid : BubbleGridManager, rotation_change : float) -> void:
 	self.total_rotation += abs(rotation_change)
 
 

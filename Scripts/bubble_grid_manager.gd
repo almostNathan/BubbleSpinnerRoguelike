@@ -18,7 +18,7 @@ var score_number_scene : PackedScene = preload("res://Scenes/UI/score_number.tsc
 var bubble_grid_slot_scene : PackedScene = preload("res://Scenes/BubbleGrid/bubble_grid_slot.tscn")
 var center_grid_slot_scene : PackedScene = preload("res://Scenes/BubbleGrid/center_bubble_grid_slot.tscn")
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	var rotation_change = self.rotation - last_rotation_value
 	SignalHub.emit_rotate_bubble_grid(self, rotation_change)
 	last_rotation_value = self.rotation
@@ -34,7 +34,7 @@ func _ready() -> void:
 func apply_effect_to_bubble_slot(effect : BaseEffect, bubble_grid_coords : Vector2i):
 	effect.apply_effect(grid_slot_dict[bubble_grid_coords])
 
-func bubble_shot(shot_bubble, launcher):
+func bubble_shot(_shot_bubble, _launcher):
 	shot_count += 1
 	if shot_count % 10 == 0:
 		await get_tree().create_timer(.5).timeout
@@ -59,7 +59,7 @@ func bubble_collided(shot_bubble: BaseBubble, collided_bubble: BaseBubble):
 	update_available_positions()
 	delete_islands()
 
-func rotate_bubble_grid(shot_bubble : BaseBubble, collided_bubble : BaseBubble):
+func rotate_bubble_grid(shot_bubble : BaseBubble, _collided_bubble : BaseBubble):
 	###This section determines rotation
 	#Notes:
 	# add weight value to bubbles that will affect this process, 
@@ -120,7 +120,6 @@ func set_up_grid_locations():
 				else:
 					x_offset =  x * BUBBLE_SIZE / 2.0
 				if x == 0 and y == 0:
-					print("bubblegridmanager createing center")
 					var new_relative_position = Vector2(x + x_offset  , y * (BUBBLE_SIZE/2.0 * sqrt(3)))
 					var new_bubble_grid_slot : CenterBubbleGridSlot = center_grid_slot_scene.instantiate()
 					new_bubble_grid_slot.setup(Vector2i(x,y), new_relative_position)
@@ -211,7 +210,7 @@ func delete_islands() -> void:
 		island_slots.erase(slot)
 	clear_slots(island_slots)
 
-func bubble_destroyed(destroyed_bubble : BaseBubble) -> void:
+func bubble_destroyed(_destroyed_bubble : BaseBubble) -> void:
 	delete_islands()
 
 func get_connected_group_pos(start_pos: Vector2i) -> Array[Vector2i]:

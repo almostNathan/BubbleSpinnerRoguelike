@@ -26,7 +26,7 @@ func reload() -> void:
 	current_bubble = new_bubble
 
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	rotation = global_position.angle_to_point(get_global_mouse_position()) - PI/2
 
 func fire_launcher():
