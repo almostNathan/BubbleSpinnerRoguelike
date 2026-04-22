@@ -139,15 +139,6 @@ func set_up_grid_locations():
 
 func add_bubbles(num_bubbles : int):
 	##randomly shoot bubbles towards the center.
-	#TODO: create globals for possible bubble types
-	var types = [
-			["red", Color(1.0, 0.0, 0.0,1)],
-			["green", Color(0.0, 1.0, 0.0,1)],
-			["blue", Color(0.0, 0.0, 1.0,1)],
-			["yellow", Color(1.0, 1.0, 0.0,1)],
-			["cyan", Color(0.0, 1.0, 1.0,1)],
-			["purple", Color(1.0, 0.0, 1.0,1)],
-		]
 	for i in range(num_bubbles):
 		var new_bubble = preload("res://Scenes/base_bubble.tscn").instantiate()
 		var new_type : String = BubbleTypes.types.keys().pick_random()

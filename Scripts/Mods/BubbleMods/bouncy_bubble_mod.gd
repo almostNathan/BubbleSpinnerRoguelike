@@ -1,0 +1,2 @@
+extends BaseBubbleMod
+class_name BouncyBubbleMod

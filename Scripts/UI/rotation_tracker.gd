@@ -43,7 +43,6 @@ func change_value(bubble_grid : BubbleGridManager, rotation_change : float) -> v
 
 
 func set_layers():
-	#TODO based on the current value, determine what layers we should be using and truncate the value
 	var layer = floor(abs(total_rotation) / MAX_VALUE)
 	if layer != current_layer:
 		current_layer = layer
