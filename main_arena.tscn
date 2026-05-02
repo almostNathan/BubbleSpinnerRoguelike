@@ -30,21 +30,21 @@ color = Color(0.329832, 0.476577, 0.885455, 1)
 [node name="Launcher" parent="." instance=ExtResource("3_yajwo")]
 position = Vector2(600, 24)
 
-[node name="LeftWall" type="Area2D" parent="."]
+[node name="LeftWall" type="Area2D" parent="." groups=["wall"]]
 position = Vector2(0, 540)
 script = ExtResource("4_kl8a0")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWall"]
 shape = SubResource("RectangleShape2D_yajwo")
 
-[node name="RightWall" type="Area2D" parent="."]
+[node name="RightWall" type="Area2D" parent="." groups=["wall"]]
 position = Vector2(1920, 540)
 script = ExtResource("5_3ienu")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall"]
 shape = SubResource("RectangleShape2D_kl8a0")
 
-[node name="BottomWall" type="Area2D" parent="."]
+[node name="BottomWall" type="Area2D" parent="." groups=["wall"]]
 position = Vector2(960, 1080)
 script = ExtResource("6_d4wu6")
 

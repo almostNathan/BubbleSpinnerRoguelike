@@ -1,5 +1,6 @@
 extends Node
 
+signal loading_bubble(bubble : BaseBubble)
 signal bubble_colliding(shot_bubble : BaseBubble, collided_bubble : BaseBubble)
 signal bubble_shot(shot_bubble : BaseBubble, launcher : Launcher)
 signal bubble_destroyed(destroyed_bubble : BaseBubble)

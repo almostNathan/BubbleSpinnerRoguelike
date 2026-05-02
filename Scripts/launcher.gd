@@ -1,7 +1,8 @@
 extends Node2D
 class_name Launcher
 
-var bubble_queue : BubbleQueue = preload("res://Scenes/bubble_queue.tscn").instantiate()
+#var bubble_queue : BubbleQueue = preload("res://Scenes/bubble_queue.tscn").instantiate()
+@onready var bubble_queue: BubbleQueue = $BubbleQueue
 
 var y_position = 24
 var current_bubble : BaseBubble 
@@ -24,6 +25,7 @@ func reload() -> void:
 	new_bubble.disable()
 	self.add_sibling(new_bubble)
 	current_bubble = new_bubble
+	SignalHub.loading_bubble.emit(current_bubble)
 
 
 func _physics_process(_delta: float) -> void:
@@ -31,9 +33,7 @@ func _physics_process(_delta: float) -> void:
 
 func fire_launcher():
 	if current_bubble != null:
-		current_bubble.set_movement_direction(current_bubble.global_position.direction_to(get_global_mouse_position()))
-		current_bubble.activate()
-		current_bubble.enable()
+		
 		
 		SignalHub.emit_bubble_shot(current_bubble, self)
 		#shot_bubbles.append(current_bubble)

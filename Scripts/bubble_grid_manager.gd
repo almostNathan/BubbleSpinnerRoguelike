@@ -38,7 +38,7 @@ func bubble_shot(_shot_bubble, _launcher):
 	shot_count += 1
 	if shot_count % 10 == 0:
 		await get_tree().create_timer(.5).timeout
-		#add_bubbles(10)
+		add_bubbles(10)
 
 func set_children_scene_root(node):
 	for child in node.get_children():
@@ -46,18 +46,19 @@ func set_children_scene_root(node):
 		child.set_owner(get_tree().edited_scene_root)
 
 func bubble_collided(shot_bubble: BaseBubble, collided_bubble: BaseBubble):
-	shot_bubble.reparent(self)
-	shot_bubble.set_owner(get_tree().edited_scene_root)
-	set_children_scene_root(shot_bubble)
-	
-	var closest_position = grid_spot_closest_to_position(shot_bubble.position)
-	grid_slot_dict[closest_position].set_bubble_in_slot(shot_bubble)
-	rotate_bubble_grid(shot_bubble, collided_bubble)
-	var connected_group_pos_array = get_connected_group_pos(closest_position)
-	if len(connected_group_pos_array) != 0:
-		score_and_clear(closest_position)
-	update_available_positions()
-	delete_islands()
+	if shot_bubble.collided:
+		shot_bubble.reparent(self)
+		shot_bubble.set_owner(get_tree().edited_scene_root)
+		set_children_scene_root(shot_bubble)
+		
+		var closest_position = grid_spot_closest_to_position(shot_bubble.position)
+		grid_slot_dict[closest_position].set_bubble_in_slot(shot_bubble)
+		rotate_bubble_grid(shot_bubble, collided_bubble)
+		var connected_group_pos_array = get_connected_group_pos(closest_position)
+		if len(connected_group_pos_array) != 0:
+			score_and_clear(closest_position)
+		update_available_positions()
+		delete_islands()
 
 func rotate_bubble_grid(shot_bubble : BaseBubble, _collided_bubble : BaseBubble):
 	###This section determines rotation
@@ -139,12 +140,13 @@ func set_up_grid_locations():
 func add_bubbles(num_bubbles : int):
 	##randomly shoot bubbles towards the center.
 	for i in range(num_bubbles):
-		var new_bubble = preload("res://Scenes/base_bubble.tscn").instantiate()
+		var new_bubble = preload("res://Scenes/bubble.tscn").instantiate()
 		var new_type : String = BubbleTypes.types.keys().pick_random()
 		new_bubble.add_type(new_type, BubbleTypes.types[new_type]['color'])
 		new_bubble.position = Vector2(300, 0).rotated(randf()*2*PI) + self.position
 		new_bubble.aim_at(self.global_position)
 		self.add_sibling(new_bubble)
+		new_bubble.bubble_state_machine.force_state(BubbleState.State.MOVING)
 		await get_tree().create_timer(.05).timeout
 
 

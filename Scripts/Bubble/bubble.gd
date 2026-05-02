@@ -4,19 +4,25 @@ class_name BaseBubble
 signal on_destroy(bubble)
 signal on_remove(bubble)
 signal on_bounce(bubble, area)
+signal on_collision(bubble, area)
+signal on_shoot(bubble)
 
 const BUBBLE_RADIUS = 20
 
-@onready var sprite = $Sprite2D
-@onready var hitbox = $Area2D
+@onready var sprite : Sprite2D = $Sprite2D
+@onready var hitbox : Area2D = $Area2D
+@onready var collision_handler = CollisionHandler.new()
+@onready var bubble_state_machine: BubbleStateMachine = $BubbleStateMachine
 
 @export var color = Color(0,.6,.6,1)
+
 
 var speed : float = Util.base_values['base_bubble_speed']
 var cur_speed : float = speed
 var weight : float = Util.base_values['base_bubble_weight']
 var movement_direction : Vector2 = Vector2(0,0)
 var active = true
+var bouncy = false
 var collided = false
 
 var types : Array[String] = []
@@ -24,15 +30,22 @@ var slot : BubbleGridSlot
 
 func _ready():
 	sprite.modulate = color
+	if bubble_state_machine:
+		bubble_state_machine.init(self)
 	#weight = 10
-#func set_label(bubble_pos: Vector2i):
-	#$Label.text = str(int(bubble_pos.x)) + "," + str(int(bubble_pos.y))
+
 func set_label(bubble_num : String) -> void:
 	$Label.text = bubble_num
 
 func _physics_process(delta: float) -> void:
-	if active:
-		self.position += movement_direction * cur_speed * delta
+	if bubble_state_machine:
+		bubble_state_machine.on_physics_process(delta)
+	#if active:
+		#self.position += movement_direction * cur_speed * delta
+
+func _input(event: InputEvent) -> void:
+	if bubble_state_machine:
+		bubble_state_machine.on_input(event)
 
 func aim_at(target_position : Vector2):
 	self.movement_direction = self.global_position.direction_to(target_position)
@@ -65,6 +78,7 @@ func destroy() -> void:
 	self.on_remove.emit(self)
 	self.queue_free()
 
+
 func put_bubble_in_position(new_position : Vector2):
 	self.position = new_position
 	self.cur_speed = 0
@@ -79,16 +93,10 @@ func score_bubble() -> int:
 		return 0
 
 func _on_area_2d_area_entered(area: Area2D) -> void:
-	if area.has_method('bounce'):
-		#TODO change to global signal and have all walls listen to the signal
-		on_bounce.emit(self, area)
-		area.bounce(self)
-	if area.is_in_group('bubble'):
-		if !collided:
-			SignalHub.emit_bubble_colliding.call_deferred(self, area.get_parent())
-			#SignalHub.emit_bubble_colliding(self,area.get_parent())
-			self.cur_speed = 0
-			collided = true
+	if self.bubble_state_machine:
+		self.bubble_state_machine.on_collision(self, area)
+	self.on_collision.emit(self, area)
+	self.collision_handler.handle_collision(self, area)
 
 func change_movement_direction(change_vector : Vector2):
 	self.movement_direction *= change_vector
