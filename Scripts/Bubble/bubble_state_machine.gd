@@ -9,6 +9,7 @@ var states := {}
 
 func init(new_bubble: BaseBubble) -> void:
 	SignalHub.loading_bubble.connect(on_load)
+	SignalHub.loading_bubble.connect(on_load)
 	for child: BubbleState in get_children():
 		if child:
 			states[child.state] = child
@@ -23,14 +24,17 @@ func on_physics_process(delta : float):
 	if current_state:
 		current_state.on_physics_process(delta)
 
-func on_collision(bubble, area):
+func on_collision(area):
 	if current_state:
-		current_state.on_collision(bubble, area)
+		current_state.on_collision(area)
 
 func on_input(event: InputEvent) -> void:
 	if current_state:
 		current_state.on_input(event)
 
+func on_set_slot(new_slot : BubbleGridSlot):
+	if current_state:
+		current_state.on_set_slot(new_slot)
 
 func on_gui_input(event: InputEvent) -> void:
 	if current_state:
@@ -63,6 +67,7 @@ func _on_transition_requested(from: BubbleState, to: BubbleState.State) -> void:
 	
 	new_state.enter()
 	current_state = new_state
+	new_state.post_enter()
 
 func force_state(to : BubbleState.State):
 	var new_state: BubbleState = states[to]

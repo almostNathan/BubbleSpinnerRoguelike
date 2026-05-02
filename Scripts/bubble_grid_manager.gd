@@ -67,7 +67,7 @@ func rotate_bubble_grid(shot_bubble : BaseBubble, _collided_bubble : BaseBubble)
 	# factoring in total weight of the current grid and the weight of the new bubble
 	var direction_to_center : Vector2 = shot_bubble.global_position.direction_to(self.position)
 	var force_angle : float = direction_to_center.angle_to(shot_bubble.movement_direction)
-	var force_value : float = shot_bubble.speed / 1500 * shot_bubble.weight
+	var force_value : float = shot_bubble.speed / Util.base_values['base_bubble_speed'] * shot_bubble.weight
 	var rotation_value : float = (-sin(force_angle) * force_value)
 	self.track_rotation(rotation_value)
 	var rotation_tween : Tween = self.create_tween()
@@ -87,7 +87,7 @@ func score_and_clear(closest_position : Vector2i) -> void:
 	for bubble_pos in connected_group_pos:
 		score += grid_slot_dict[bubble_pos].score_slot()
 	
-	var score_number :ScoreNumber = score_number_scene.instantiate()
+	var score_number : ScoreNumber = score_number_scene.instantiate()
 	add_sibling(score_number)
 	score_number.score_value = score
 	SignalHub.emit_scoring_bubbles(score_number)
@@ -140,7 +140,7 @@ func set_up_grid_locations():
 func add_bubbles(num_bubbles : int):
 	##randomly shoot bubbles towards the center.
 	for i in range(num_bubbles):
-		var new_bubble = preload("res://Scenes/bubble.tscn").instantiate()
+		var new_bubble = preload("res://Scenes/Bubble/bubble.tscn").instantiate()
 		var new_type : String = BubbleTypes.types.keys().pick_random()
 		new_bubble.add_type(new_type, BubbleTypes.types[new_type]['color'])
 		new_bubble.position = Vector2(300, 0).rotated(randf()*2*PI) + self.position

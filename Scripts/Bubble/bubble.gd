@@ -11,7 +11,7 @@ const BUBBLE_RADIUS = 20
 
 @onready var sprite : Sprite2D = $Sprite2D
 @onready var hitbox : Area2D = $Area2D
-@onready var collision_handler = CollisionHandler.new()
+#@onready var collision_handler = CollisionHandler.new()
 @onready var bubble_state_machine: BubbleStateMachine = $BubbleStateMachine
 
 @export var color = Color(0,.6,.6,1)
@@ -32,7 +32,9 @@ func _ready():
 	sprite.modulate = color
 	if bubble_state_machine:
 		bubble_state_machine.init(self)
-	#weight = 10
+	#self.cur_speed = 3000
+	#self.speed = 3000
+	#self.weight = 10
 
 func set_label(bubble_num : String) -> void:
 	$Label.text = bubble_num
@@ -40,8 +42,6 @@ func set_label(bubble_num : String) -> void:
 func _physics_process(delta: float) -> void:
 	if bubble_state_machine:
 		bubble_state_machine.on_physics_process(delta)
-	#if active:
-		#self.position += movement_direction * cur_speed * delta
 
 func _input(event: InputEvent) -> void:
 	if bubble_state_machine:
@@ -79,9 +79,6 @@ func destroy() -> void:
 	self.queue_free()
 
 
-func put_bubble_in_position(new_position : Vector2):
-	self.position = new_position
-	self.cur_speed = 0
 
 func score_bubble() -> int:
 	if len(types) != 0:
@@ -93,10 +90,11 @@ func score_bubble() -> int:
 		return 0
 
 func _on_area_2d_area_entered(area: Area2D) -> void:
+	#self.collided = true
 	if self.bubble_state_machine:
-		self.bubble_state_machine.on_collision(self, area)
-	self.on_collision.emit(self, area)
-	self.collision_handler.handle_collision(self, area)
+		self.bubble_state_machine.on_collision(area)
+	#self.on_collision.emit(self, area)
+	#self.collision_handler.handle_collision(self, area)
 
 func change_movement_direction(change_vector : Vector2):
 	self.movement_direction *= change_vector

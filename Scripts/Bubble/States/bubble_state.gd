@@ -19,7 +19,7 @@ func post_enter() -> void:
 func exit() -> void:
 	pass
 
-func on_collision(_bubble : BaseBubble, _area : Area2D) -> void:
+func on_collision(_area : Area2D) -> void:
 	pass
 
 func on_physics_process(_delta : float) -> void:
@@ -31,6 +31,8 @@ func on_load(bubble : BaseBubble) -> void:
 func on_input(_event: InputEvent) -> void:
 	pass
 
+func on_set_slot(new_slot : BubbleGridSlot):
+	pass
 
 func on_gui_input(_event: InputEvent) -> void:
 	pass

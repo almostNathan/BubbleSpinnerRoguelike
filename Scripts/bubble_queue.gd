@@ -15,7 +15,7 @@ func add_mod_to_all_bubbles(new_mod : BaseBubbleMod) -> void:
 
 func reload_current_queue() -> void:
 	for i in range(10):
-		var new_bubble = preload("res://Scenes/bubble.tscn").instantiate()
+		var new_bubble = preload("res://Scenes/Bubble/bubble.tscn").instantiate()
 		var new_type : String = BubbleTypes.types.keys().pick_random()
 		new_bubble.add_type(new_type, BubbleTypes.types[new_type]['color'])
 		current_queue.append(new_bubble)

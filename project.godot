@@ -33,6 +33,7 @@ window/size/mode=2
 bubble=""
 bubble_grid_slots=""
 all_mods="Every mod type."
+bubble_grid_manager=""
 
 [input]
 

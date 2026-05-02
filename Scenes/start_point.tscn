@@ -1,8 +1,15 @@
-[gd_scene load_steps=5 format=3 uid="uid://ci3mgpg466xp4"]
+[gd_scene load_steps=12 format=3 uid="uid://ci3mgpg466xp4"]
 
 [ext_resource type="Script" uid="uid://xpuln8odt82w" path="res://Scripts/start_point.gd" id="1_1pl8i"]
 [ext_resource type="Texture2D" uid="uid://dgocb1i6ielpu" path="res://Textures/white_bubble.png" id="1_02nw6"]
 [ext_resource type="Script" uid="uid://brsoflojtuhn3" path="res://Scripts/Bubble/ColllisionHandler/collision_handler.gd" id="3_l4tn5"]
+[ext_resource type="Script" uid="uid://c24r7t4jyloif" path="res://Scripts/Bubble/bubble_state_machine.gd" id="4_aufnp"]
+[ext_resource type="Script" uid="uid://j2p7eficlgic" path="res://Scripts/Bubble/States/bubble_base_state.gd" id="5_vlwms"]
+[ext_resource type="Script" uid="uid://baucpxkfnkipv" path="res://Scripts/Bubble/States/bubble_loaded_state.gd" id="6_i2d6q"]
+[ext_resource type="Script" uid="uid://c0o2o7e3roof0" path="res://Scripts/Bubble/States/bubble_shot_state.gd" id="7_3t4ai"]
+[ext_resource type="Script" uid="uid://2i2pg7c31dbu" path="res://Scripts/Bubble/States/bubble_moving_state.gd" id="8_othva"]
+[ext_resource type="Script" uid="uid://cd2hksycxxyej" path="res://Scripts/Bubble/States/bubble_collided_state.gd" id="9_rxf7k"]
+[ext_resource type="Script" uid="uid://do5u5niwnadw5" path="res://Scripts/Bubble/States/bubble_slotted_state.gd" id="10_k3ho2"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1pl8i"]
 radius = 20.0
@@ -29,5 +36,32 @@ text = "|"
 [node name="CollisionHandler" type="Node" parent="."]
 script = ExtResource("3_l4tn5")
 metadata/_custom_type_script = "uid://brsoflojtuhn3"
+
+[node name="BubbleStateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+script = ExtResource("4_aufnp")
+initial_state = NodePath("BubbleSlottedState")
+
+[node name="BubbleBaseState" type="Node" parent="BubbleStateMachine"]
+script = ExtResource("5_vlwms")
+
+[node name="BubbleLoadedState" type="Node" parent="BubbleStateMachine"]
+script = ExtResource("6_i2d6q")
+state = 1
+
+[node name="BubbleShotState" type="Node" parent="BubbleStateMachine"]
+script = ExtResource("7_3t4ai")
+state = 2
+
+[node name="BubbleMovingState" type="Node" parent="BubbleStateMachine"]
+script = ExtResource("8_othva")
+state = 3
+
+[node name="BubbleCollidedState" type="Node" parent="BubbleStateMachine"]
+script = ExtResource("9_rxf7k")
+state = 4
+
+[node name="BubbleSlottedState" type="Node" parent="BubbleStateMachine"]
+script = ExtResource("10_k3ho2")
+state = 5
 
 [connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]

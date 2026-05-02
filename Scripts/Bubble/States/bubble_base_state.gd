@@ -1,11 +1,6 @@
 extends BubbleState
 class_name BubbleBaseState
-
 # Starting state for bubbles. used for bubbles in the queue off screen.
-
-func enter() -> void:
-	print(self, " entering base state")
-
 
 func exit() -> void:
 	pass

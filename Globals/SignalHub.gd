@@ -2,11 +2,12 @@ extends Node
 
 signal loading_bubble(bubble : BaseBubble)
 signal bubble_colliding(shot_bubble : BaseBubble, collided_bubble : BaseBubble)
-signal bubble_shot(shot_bubble : BaseBubble, launcher : Launcher)
+signal bubble_shot(shot_bubble : BaseBubble)
 signal bubble_destroyed(destroyed_bubble : BaseBubble)
 signal apply_effect_to_bubble_slot(effect : BaseEffect, bubble_slot_coords : Vector2i)
 signal rotate_bubble_grid(bubble_grid : BubbleGridManager, rotation_change : float)
 signal scoring_bubbles(score_number : ScoreNumber)
+#signal reparent_requested(bubble : BaseBubble, new_parent : StringName)
 
 ## Set of Bubbles Scored
 func connect_scoring_bubbles(callable : Callable):
@@ -35,8 +36,8 @@ func emit_bubble_colliding(_shot_bubble, _collided_bubble):
 ## Bubble Shot
 func connect_bubble_shot(callable : Callable):
 	self.bubble_shot.connect(callable)
-func emit_bubble_shot(_shot_bubble, _launcher):
-	bubble_shot.emit(_shot_bubble, _launcher)
+func emit_bubble_shot(shot_bubble):
+	bubble_shot.emit(shot_bubble)
 
 # Apply Effect to Bubble Slot
 func connect_apply_effect_to_bubble_slot(callable : Callable):
