@@ -24,10 +24,14 @@ func on_physics_process(delta : float):
 	if current_state:
 		current_state.on_physics_process(delta)
 
-func on_collision(area):
+func on_collision(area : Area2D):
 	if current_state:
 		current_state.on_collision(area)
 
+func on_collided_into(bubble : BaseBubble):
+	if current_state:
+		current_state.on_collided_into(bubble)
+		
 func on_input(event: InputEvent) -> void:
 	if current_state:
 		current_state.on_input(event)

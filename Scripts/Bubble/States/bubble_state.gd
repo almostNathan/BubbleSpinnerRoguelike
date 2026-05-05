@@ -22,6 +22,9 @@ func exit() -> void:
 func on_collision(_area : Area2D) -> void:
 	pass
 
+func on_collided_into(bubble : BaseBubble) -> void:
+	pass
+
 func on_physics_process(_delta : float) -> void:
 	pass
 

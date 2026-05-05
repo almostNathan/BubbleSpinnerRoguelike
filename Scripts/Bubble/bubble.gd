@@ -96,6 +96,11 @@ func _on_area_2d_area_entered(area: Area2D) -> void:
 	#self.on_collision.emit(self, area)
 	#self.collision_handler.handle_collision(self, area)
 
+##Function for when this object is collided into. 
+func collided_into(bubble : BaseBubble) -> void:
+	if self.bubble_state_machine:
+		self.bubble_state_machine.on_collided_into(area)
+
 func change_movement_direction(change_vector : Vector2):
 	self.movement_direction *= change_vector
 
