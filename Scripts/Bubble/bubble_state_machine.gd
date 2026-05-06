@@ -3,12 +3,11 @@ class_name BubbleStateMachine
 
 @export var initial_state: BubbleState
 
-var current_state: BubbleState
+var current_state : BubbleState
 var states := {}
 
 
 func init(new_bubble: BaseBubble) -> void:
-	SignalHub.loading_bubble.connect(on_load)
 	SignalHub.loading_bubble.connect(on_load)
 	for child: BubbleState in get_children():
 		if child:
@@ -19,6 +18,12 @@ func init(new_bubble: BaseBubble) -> void:
 	if initial_state:
 		initial_state.enter()
 		current_state = initial_state
+
+
+
+func set_slot(new_slot : BubbleGridSlot):
+	if current_state:
+		current_state.set_slot(new_slot)
 
 func on_physics_process(delta : float):
 	if current_state:

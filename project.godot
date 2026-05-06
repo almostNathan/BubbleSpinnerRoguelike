@@ -21,6 +21,7 @@ SignalHub="*res://Globals/SignalHub.gd"
 BubbleTypes="*res://Globals/BubbleTypes.gd"
 Hud="*res://Globals/HUD/HUD.tscn"
 Util="*res://Globals/Util/util.gd"
+CollisionHandler="*res://Globals/CollisionHandler.gd"
 
 [display]
 

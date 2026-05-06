@@ -58,6 +58,8 @@ func add_type(new_type : String, new_color : Color) -> void:
 	self.color = new_color
 
 func set_slot(new_slot : BubbleGridSlot) -> void:
+	if bubble_state_machine:
+		return bubble_state_machine.set_slot(new_slot)
 	self.slot = new_slot
 
 func get_grid_position() -> Vector2i:
@@ -99,7 +101,7 @@ func _on_area_2d_area_entered(area: Area2D) -> void:
 ##Function for when this object is collided into. 
 func collided_into(bubble : BaseBubble) -> void:
 	if self.bubble_state_machine:
-		self.bubble_state_machine.on_collided_into(area)
+		self.bubble_state_machine.on_collided_into(bubble)
 
 func change_movement_direction(change_vector : Vector2):
 	self.movement_direction *= change_vector

@@ -15,8 +15,7 @@ func _ready() -> void:
 	#bubble_grid_manager.position = 
 	bubble_grid_manager.set_up_grid_locations()
 	launcher.new_round()
-	if null:
-		print("null")
+
 	#bubble_grid_manager.rotate_grid(1.0)
 	#for new_position in grid_positions.keys():
 		#var new_bubble = preload("res://Scenes/base_bubble.tscn").instantiate()

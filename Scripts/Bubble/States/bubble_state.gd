@@ -19,6 +19,9 @@ func post_enter() -> void:
 func exit() -> void:
 	pass
 
+func set_slot(new_slot : BubbleGridSlot):
+	self.transition_requested.emit(self, State.SLOTTED)
+
 func on_collision(_area : Area2D) -> void:
 	pass
 
