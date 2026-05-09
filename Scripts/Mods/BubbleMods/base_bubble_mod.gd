@@ -4,7 +4,7 @@ class_name BaseBubbleMod
 var bubble : BaseBubble 
 
 func attach(new_bubble : BaseBubble) -> void:
-	bubble = new_bubble
+	self.bubble = new_bubble
 
 func clean_up():
 	if bubble == null:

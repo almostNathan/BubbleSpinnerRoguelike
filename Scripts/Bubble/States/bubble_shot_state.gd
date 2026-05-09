@@ -7,5 +7,4 @@ func enter() -> void:
 	bubble.set_movement_direction(bubble.global_position.direction_to(bubble.get_global_mouse_position()))
 
 func post_enter() -> void:
-	print("post enter shot state")
 	self.transition_requested.emit(self, BubbleState.State.MOVING)

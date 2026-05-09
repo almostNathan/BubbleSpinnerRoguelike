@@ -1,9 +1,9 @@
 [gd_scene load_steps=3 format=3 uid="uid://b8y7ihlvhatja"]
 
-[ext_resource type="Script" uid="uid://evj0na1f4a6r" path="res://Scripts/Mods/BubbleMods/bouncy_bubble_mod.gd" id="1_nm103"]
+[ext_resource type="Script" uid="uid://evj0na1f4a6r" path="res://Scripts/Mods/BubbleMods/bouncy_slotted_state.gd" id="1_nm103"]
 [ext_resource type="Texture2D" uid="uid://c5o814aemymav" path="res://Assets/Textures/bounce.png" id="2_f4pd8"]
 
-[node name="BouncyBubbleMod" type="Node2D"]
+[node name="BouncySlottedState" type="Node2D"]
 script = ExtResource("1_nm103")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

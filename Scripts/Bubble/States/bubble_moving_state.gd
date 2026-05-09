@@ -10,13 +10,4 @@ func on_physics_process(delta : float):
 
 func on_collision(area : Area2D):
 	self.transition_requested.emit(self, State.COLLIDED)
-	#if area.is_in_group('wall'):
-		##TODO change to global signal and have all walls listen to the signal
-		#bubble.on_bounce.emit(bubble, area)
-		#area.bounce(bubble)
-	#if area.is_in_group('bubble') and !bubble.collided: 
-		#bubble.cur_speed = 0
-		#bubble.collided = true
-		#transition_requested.emit(self, BubbleState.State.COLLIDED)
-		#SignalHub.emit_bubble_colliding(bubble, area.get_parent())
-		
+	

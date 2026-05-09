@@ -1,12 +1,13 @@
-[gd_scene load_steps=4 format=3 uid="uid://jxnaljy2gdmt"]
+[gd_scene load_steps=5 format=3 uid="uid://jxnaljy2gdmt"]
 
 [ext_resource type="Script" uid="uid://dq58ou4stw116" path="res://Globals/HUD/HUD.gd" id="1_pqaou"]
+[ext_resource type="LabelSettings" uid="uid://ct4cnsniqaj4x" path="res://Assets/Font/score_label_settings.tres" id="2_7brgm"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_7brgm"]
-font_size = 32
+[sub_resource type="LabelSettings" id="LabelSettings_5ipvj"]
+font_size = 20
 
-[sub_resource type="LabelSettings" id="LabelSettings_pqaou"]
-font_size = 32
+[sub_resource type="LabelSettings" id="LabelSettings_bpinn"]
+font_size = 20
 
 [node name="Hud" type="CanvasLayer"]
 script = ExtResource("1_pqaou")
@@ -15,12 +16,39 @@ script = ExtResource("1_pqaou")
 offset_right = 92.0
 offset_bottom = 138.0
 
-[node name="ScoreLabel" type="Label" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
-text = "0"
-label_settings = SubResource("LabelSettings_7brgm")
 
-[node name="LastScoreLabel" type="Label" parent="VBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "TOTAL: "
+label_settings = SubResource("LabelSettings_5ipvj")
+
+[node name="ScoreLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "0"
-label_settings = SubResource("LabelSettings_pqaou")
+label_settings = ExtResource("2_7brgm")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "LAST: "
+label_settings = SubResource("LabelSettings_bpinn")
+
+[node name="LastScoreLabel" type="Label" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "0"
+label_settings = ExtResource("2_7brgm")
+
+[node name="SpawnCountdown" type="Label" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 49.0
+grow_horizontal = 0
+text = "0
+"
+label_settings = ExtResource("2_7brgm")

@@ -1,10 +1,11 @@
 extends BaseBubbleMod
-class_name BouncyBubbleMod
+class_name BouncySlottedMod
 
 
 func attach(new_bubble : BaseBubble) -> void:
 	super(new_bubble)
 	new_bubble.add_child(self)
+	new_bubble.on_collision_override.connect(_collision_override)
 	#if new_bubble.collision_handler:
 		#new_bubble.collision_handler
 	#new_bubble.replace_collision_handler(BouncyCollisionHandler.new())
@@ -13,8 +14,7 @@ func attach(new_bubble : BaseBubble) -> void:
 		#new_bubble.movement_direction = Vector2(0,-1)
 		
 
-#func _on_collision(shot_bubble : BaseBubble, collided_bubble : BaseBubble):
-	#if collided_bubble == self.bubble:
-		#print("on_collision bouncybubblemod")
-		#shot_bubble.collided = false
-		#shot_bubble.set_movement_direction(collided_bubble.position - shot_bubble.position) 
+func _collision_override(shot_bubble : BaseBubble, bubble_state : BubbleState.State):
+	if bubble_state == BubbleState.State.SLOTTED:
+		var collision_normal = (shot_bubble.position - self.bubble.position).normalized()
+		shot_bubble.movement_direction = shot_bubble.movement_direction.reflect(collision_normal)

@@ -35,7 +35,10 @@ func reload() -> void:
 
 func _physics_process(_delta: float) -> void:
 	rotation = global_position.angle_to_point(get_global_mouse_position()) - PI/2
+	queue_redraw()
 
+func _draw() -> void:
+	draw_line(Vector2(0,0), get_local_mouse_position(),Color.BLACK)
 
 
 

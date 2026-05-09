@@ -7,3 +7,13 @@
 script = ExtResource("1_ntsom")
 
 [node name="StartPoint" parent="." instance=ExtResource("2_j0c04")]
+
+[node name="IslandCheckTimer" type="Timer" parent="."]
+autostart = true
+
+[node name="ScoringTimer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
+[connection signal="timeout" from="IslandCheckTimer" to="." method="_on_island_check_timer_timeout"]
+[connection signal="timeout" from="ScoringTimer" to="." method="_on_scoring_timer_timeout"]

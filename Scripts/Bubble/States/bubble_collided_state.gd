@@ -15,11 +15,9 @@ func post_enter() -> void:
 		
 	if area.is_in_group('bubble') and !bubble.collided: 
 		#TODO: check with collided bubble to determine outcome of collision
-		CollisionHandler.handle_collision(bubble, area.get_parent())
-		#bubble.cur_speed = 0
-		bubble.collided = true
-		var bubble_grid_manager = get_tree().get_first_node_in_group("bubble_grid_manager")
-		bubble_grid_manager.bubble_collided.call_deferred(bubble, area.get_parent())
-		#SignalHub.emit_bubble_colliding.call_deferred(bubble, area.get_parent())
-		self.transition_requested.emit(self, State.SLOTTED)
+		if CollisionHandler.handle_collision(bubble, area.get_parent()):
+			return
+		else:
+			self.transition_requested.emit(self, State.MOVING)
+			
 		

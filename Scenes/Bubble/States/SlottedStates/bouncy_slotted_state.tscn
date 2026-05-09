@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bjs2h43wljhcm"]
+
+[ext_resource type="Script" uid="uid://ddfsbrjlawo1b" path="res://Scripts/Bubble/States/SlottedStates/bouncy_slotted_state.gd" id="1_d8llr"]
+
+[node name="BouncySlottedState" type="Node"]
+script = ExtResource("1_d8llr")

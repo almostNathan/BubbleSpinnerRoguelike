@@ -26,9 +26,10 @@ offset_bottom = 1080.0
 color = Color(0.329832, 0.476577, 0.885455, 1)
 
 [node name="RotationTracker" parent="." instance=ExtResource("7_2rdfv")]
+position = Vector2(898, 528)
 
 [node name="Launcher" parent="." instance=ExtResource("3_yajwo")]
-position = Vector2(600, 24)
+position = Vector2(895, 26)
 
 [node name="LeftWall" type="Area2D" parent="." groups=["wall"]]
 position = Vector2(0, 540)
@@ -52,4 +53,4 @@ script = ExtResource("6_d4wu6")
 shape = SubResource("RectangleShape2D_3ienu")
 
 [node name="BubbleGridManager" parent="." instance=ExtResource("7_yilo4")]
-position = Vector2(600, 450)
+position = Vector2(897, 530)

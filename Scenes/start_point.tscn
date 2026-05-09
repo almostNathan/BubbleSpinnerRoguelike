@@ -1,8 +1,7 @@
-[gd_scene load_steps=12 format=3 uid="uid://ci3mgpg466xp4"]
+[gd_scene load_steps=11 format=3 uid="uid://ci3mgpg466xp4"]
 
 [ext_resource type="Script" uid="uid://xpuln8odt82w" path="res://Scripts/start_point.gd" id="1_1pl8i"]
 [ext_resource type="Texture2D" uid="uid://dgocb1i6ielpu" path="res://Textures/white_bubble.png" id="1_02nw6"]
-[ext_resource type="Script" uid="uid://brsoflojtuhn3" path="res://Scripts/Bubble/ColllisionHandler/collision_handler.gd" id="3_l4tn5"]
 [ext_resource type="Script" uid="uid://c24r7t4jyloif" path="res://Scripts/Bubble/bubble_state_machine.gd" id="4_aufnp"]
 [ext_resource type="Script" uid="uid://j2p7eficlgic" path="res://Scripts/Bubble/States/bubble_base_state.gd" id="5_vlwms"]
 [ext_resource type="Script" uid="uid://baucpxkfnkipv" path="res://Scripts/Bubble/States/bubble_loaded_state.gd" id="6_i2d6q"]
@@ -32,10 +31,6 @@ offset_top = -13.0
 offset_right = 35.0
 offset_bottom = 10.0
 text = "|"
-
-[node name="CollisionHandler" type="Node" parent="."]
-script = ExtResource("3_l4tn5")
-metadata/_custom_type_script = "uid://brsoflojtuhn3"
 
 [node name="BubbleStateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
 script = ExtResource("4_aufnp")

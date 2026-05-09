@@ -25,6 +25,16 @@ func set_slot(new_slot : BubbleGridSlot):
 func on_collision(_area : Area2D) -> void:
 	pass
 
+func on_score(score_number : ScoreNumber) -> void:
+	if len(bubble.types) != 0:
+		var score_sum = 0
+		for type in bubble.types:
+			score_sum += BubbleTypes.types[type]['value']
+		score_number.score_value += score_sum
+
+func collision_override(incoming_bubble : BaseBubble) -> bool:
+	return false
+
 func on_collided_into(bubble : BaseBubble) -> void:
 	pass
 

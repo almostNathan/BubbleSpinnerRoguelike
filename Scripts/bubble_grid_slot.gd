@@ -57,11 +57,10 @@ func get_adjacent_grid_positions() -> Array[Vector2i]:
 		adjacent_grid_positions_array.append(grid_position + position_change)
 	return adjacent_grid_positions_array
 
-func score_slot() -> int:
+func score_slot(score_number : ScoreNumber) -> void:
 	if bubble_in_slot != null:
-		return bubble_in_slot.score_bubble()
-	else:
-		return 0
+		bubble_in_slot.score_bubble(score_number)
+	
 
 func get_types() -> Array[String]:
 	if bubble_in_slot:

@@ -6,6 +6,7 @@ signal on_remove(bubble)
 signal on_bounce(bubble, area)
 signal on_collision(bubble, area)
 signal on_shoot(bubble)
+signal on_collision_override(self_bubble, current_state)
 
 const BUBBLE_RADIUS = 20
 
@@ -25,6 +26,7 @@ var active = true
 var bouncy = false
 var collided = false
 
+var mod_states : Array[BubbleState] = []
 var types : Array[String] = []
 var slot : BubbleGridSlot
 
@@ -32,8 +34,8 @@ func _ready():
 	sprite.modulate = color
 	if bubble_state_machine:
 		bubble_state_machine.init(self)
-	#self.cur_speed = 3000
-	#self.speed = 3000
+	#self.cur_speed = 1000
+	#self.speed = 1000
 	#self.weight = 10
 
 func set_label(bubble_num : String) -> void:
@@ -46,6 +48,12 @@ func _physics_process(delta: float) -> void:
 func _input(event: InputEvent) -> void:
 	if bubble_state_machine:
 		bubble_state_machine.on_input(event)
+
+func collision_override(incoming_bubble : BaseBubble) -> bool:
+	if bubble_state_machine:
+		return bubble_state_machine.collision_override(incoming_bubble)
+	else:
+		return false
 
 func aim_at(target_position : Vector2):
 	self.movement_direction = self.global_position.direction_to(target_position)
@@ -80,23 +88,20 @@ func destroy() -> void:
 	self.on_remove.emit(self)
 	self.queue_free()
 
-
-
-func score_bubble() -> int:
-	if len(types) != 0:
-		var score_sum = 0
-		for type in types:
-			score_sum += BubbleTypes.types[type]['value']
-		return score_sum
-	else:
-		return 0
+func score_bubble(score_number : ScoreNumber) -> void:
+	if self.bubble_state_machine:
+		self.bubble_state_machine.on_score(score_number)
+	#if len(types) != 0:
+		#var score_sum = 0
+		#for type in types:
+			#score_sum += BubbleTypes.types[type]['value']
+		#return score_sum
+	#else:
+		#return 0
 
 func _on_area_2d_area_entered(area: Area2D) -> void:
-	#self.collided = true
 	if self.bubble_state_machine:
 		self.bubble_state_machine.on_collision(area)
-	#self.on_collision.emit(self, area)
-	#self.collision_handler.handle_collision(self, area)
 
 ##Function for when this object is collided into. 
 func collided_into(bubble : BaseBubble) -> void:
@@ -106,8 +111,12 @@ func collided_into(bubble : BaseBubble) -> void:
 func change_movement_direction(change_vector : Vector2):
 	self.movement_direction *= change_vector
 
-func add_mod(new_mod:BaseBubbleMod):
-	new_mod.attach(self)
+func add_mod(new_state: BubbleState) -> void:
+	mod_states.append(new_state)
+	if is_inside_tree():
+		new_state.attach(self)
+	else:
+		ready.connect(func(): new_state.attach(self), CONNECT_ONE_SHOT)
 
 func deactivate():
 	active = false

@@ -7,6 +7,8 @@ signal bubble_destroyed(destroyed_bubble : BaseBubble)
 signal apply_effect_to_bubble_slot(effect : BaseEffect, bubble_slot_coords : Vector2i)
 signal rotate_bubble_grid(bubble_grid : BubbleGridManager, rotation_change : float)
 signal scoring_bubbles(score_number : ScoreNumber)
+
+
 #signal reparent_requested(bubble : BaseBubble, new_parent : StringName)
 
 ## Set of Bubbles Scored
