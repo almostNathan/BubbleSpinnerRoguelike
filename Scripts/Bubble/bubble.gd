@@ -8,7 +8,7 @@ signal on_collision(bubble, area)
 signal on_shoot(bubble)
 signal on_collision_override(self_bubble, current_state)
 
-const BUBBLE_RADIUS = 20
+const BUBBLE_RADIUS = 30
 
 @onready var sprite : Sprite2D = $Sprite2D
 @onready var hitbox : Area2D = $Area2D

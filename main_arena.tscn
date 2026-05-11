@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://b75l6lph5nhge"]
+[gd_scene load_steps=12 format=3 uid="uid://b75l6lph5nhge"]
 
 [ext_resource type="Script" uid="uid://bduy347mjjq8q" path="res://main_arena.gd" id="1_r7ygb"]
 [ext_resource type="PackedScene" uid="uid://d2aoyrb284655" path="res://Scenes/launcher.tscn" id="3_yajwo"]
@@ -16,6 +16,9 @@ size = Vector2(32, 1198.75)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3ienu"]
 size = Vector2(1977.5, 21)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yilo4"]
+size = Vector2(1930, 20)
 
 [node name="MainArena" type="Node2D"]
 script = ExtResource("1_r7ygb")
@@ -54,3 +57,9 @@ shape = SubResource("RectangleShape2D_3ienu")
 
 [node name="BubbleGridManager" parent="." instance=ExtResource("7_yilo4")]
 position = Vector2(897, 530)
+
+[node name="Backstop" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Backstop"]
+position = Vector2(955, -34)
+shape = SubResource("RectangleShape2D_yilo4")

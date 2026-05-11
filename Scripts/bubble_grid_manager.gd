@@ -9,7 +9,9 @@ const GRID_SIZE_Y : int = 20
 var center_point : Vector2
 var grid_slot_dict : Dictionary[Vector2i, BubbleGridSlot]
 var shot_count : int = 0
-var spawn_countdown = 5
+var spawn_pattern : Array[int] = [5,4,3,2,1]
+var spawn_countdown = spawn_pattern[0]
+var spawn_counter = 0
 var total_rotation : float = 0
 var last_rotation_value : float = 0
 
@@ -44,7 +46,8 @@ func bubble_shot(_shot_bubble):
 	if spawn_countdown <= 0:
 		await get_tree().create_timer(.5).timeout
 		add_bubbles(10)
-		spawn_countdown = 5
+		spawn_counter += 1
+		spawn_countdown = spawn_pattern[spawn_counter] if spawn_pattern.size() > spawn_counter else 1
 	Hud.set_spawn_countdown(spawn_countdown)
 
 func set_children_scene_root(node):
