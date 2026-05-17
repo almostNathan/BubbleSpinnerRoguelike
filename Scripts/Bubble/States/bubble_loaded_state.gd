@@ -2,6 +2,13 @@ extends BubbleState
 class_name BubbleLoadedState
 
 
+func enter() -> void:
+	bubble.collision_shape.disabled = true
+
+
+func exit() -> void:
+	bubble.collision_shape.disabled = false
+
 func on_physics_process(_delta : float) -> void:
 	bubble.rotation = bubble.global_position.angle_to_point(bubble.get_global_mouse_position()) - PI/2
 	

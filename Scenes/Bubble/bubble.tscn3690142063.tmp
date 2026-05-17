@@ -1,0 +1,69 @@
+[gd_scene load_steps=12 format=3 uid="uid://cwwbt8wfeju4u"]
+
+[ext_resource type="Script" uid="uid://b7xa0edhqp7g" path="res://Scripts/Bubble/bubble.gd" id="1_8jf2s"]
+[ext_resource type="Texture2D" uid="uid://dgocb1i6ielpu" path="res://Textures/white_bubble.png" id="2_thgr1"]
+[ext_resource type="Script" uid="uid://c24r7t4jyloif" path="res://Scripts/Bubble/bubble_state_machine.gd" id="3_733yr"]
+[ext_resource type="Script" uid="uid://cd2hksycxxyej" path="res://Scripts/Bubble/States/bubble_collided_state.gd" id="4_mher7"]
+[ext_resource type="Script" uid="uid://baucpxkfnkipv" path="res://Scripts/Bubble/States/bubble_loaded_state.gd" id="5_sqrnf"]
+[ext_resource type="Script" uid="uid://c0o2o7e3roof0" path="res://Scripts/Bubble/States/bubble_shot_state.gd" id="6_x6cym"]
+[ext_resource type="Script" uid="uid://do5u5niwnadw5" path="res://Scripts/Bubble/States/bubble_slotted_state.gd" id="7_pksoc"]
+[ext_resource type="Script" uid="uid://2i2pg7c31dbu" path="res://Scripts/Bubble/States/bubble_moving_state.gd" id="8_sqrnf"]
+[ext_resource type="Script" uid="uid://j2p7eficlgic" path="res://Scripts/Bubble/States/bubble_base_state.gd" id="9_x6cym"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_kdads"]
+radius = 20.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_8jf2s"]
+font_size = 10
+font_color = Color(0, 0, 0, 1)
+
+[node name="Bubble" type="Node2D"]
+script = ExtResource("1_8jf2s")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(1.25, 1.25)
+texture = ExtResource("2_thgr1")
+
+[node name="Area2D" type="Area2D" parent="." groups=["bubble"]]
+disable_mode = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_kdads")
+
+[node name="Label" type="Label" parent="."]
+visible = false
+offset_left = -15.0
+offset_top = -7.0
+offset_right = 13.0
+offset_bottom = 16.0
+text = "0,0"
+label_settings = SubResource("LabelSettings_8jf2s")
+
+[node name="BubbleStateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+script = ExtResource("3_733yr")
+initial_state = NodePath("BubbleBaseState")
+
+[node name="BubbleBaseState" type="Node" parent="BubbleStateMachine"]
+script = ExtResource("9_x6cym")
+
+[node name="BubbleLoadedState" type="Node" parent="BubbleStateMachine"]
+script = ExtResource("5_sqrnf")
+state = 1
+
+[node name="BubbleShotState" type="Node" parent="BubbleStateMachine"]
+script = ExtResource("6_x6cym")
+state = 2
+
+[node name="BubbleMovingState" type="Node" parent="BubbleStateMachine"]
+script = ExtResource("8_sqrnf")
+state = 3
+
+[node name="BubbleCollidedState" type="Node" parent="BubbleStateMachine"]
+script = ExtResource("4_mher7")
+state = 4
+
+[node name="BubbleSlottedState" type="Node" parent="BubbleStateMachine"]
+script = ExtResource("7_pksoc")
+state = 5
+
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]

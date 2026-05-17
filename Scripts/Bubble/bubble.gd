@@ -12,8 +12,8 @@ const BUBBLE_RADIUS = 30
 
 @onready var sprite : Sprite2D = $Sprite2D
 @onready var hitbox : Area2D = $Area2D
-#@onready var collision_handler = CollisionHandler.new()
 @onready var bubble_state_machine: BubbleStateMachine = $BubbleStateMachine
+@onready var collision_shape: CollisionShape2D = $Area2D/CollisionShape2D
 
 @export var color = Color(0,.6,.6,1)
 

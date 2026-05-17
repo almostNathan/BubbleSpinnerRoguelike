@@ -9,8 +9,11 @@ var last_score : int = 0
 
 func change_score(change_value : int) -> void:
 	self.last_score = change_value
+	var old_score = self.score
 	self.score += change_value
 	refresh()
+	
+	SignalHub.emit_changing_score(old_score, score)
 
 func set_spawn_countdown(new_value : int) -> void:
 	spawn_countdown.text = str(new_value)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://b75l6lph5nhge"]
+[gd_scene load_steps=13 format=3 uid="uid://b75l6lph5nhge"]
 
 [ext_resource type="Script" uid="uid://bduy347mjjq8q" path="res://main_arena.gd" id="1_r7ygb"]
 [ext_resource type="PackedScene" uid="uid://d2aoyrb284655" path="res://Scenes/launcher.tscn" id="3_yajwo"]
@@ -7,9 +7,10 @@
 [ext_resource type="Script" uid="uid://dsnj6dg3ppgl" path="res://Scripts/bottom_wall.gd" id="6_d4wu6"]
 [ext_resource type="PackedScene" uid="uid://c1qndh8emvug5" path="res://Scenes/UI/rotation_tracker.tscn" id="7_2rdfv"]
 [ext_resource type="PackedScene" uid="uid://btgl6q2mkb7vt" path="res://Scenes/BubbleGrid/bubble_grid_manager.tscn" id="7_yilo4"]
+[ext_resource type="Script" uid="uid://b158a0f1fs2nu" path="res://Scripts/round_handler.gd" id="8_2rdfv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yajwo"]
-size = Vector2(20, 1140)
+size = Vector2(20, 1179)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kl8a0"]
 size = Vector2(32, 1198.75)
@@ -23,10 +24,10 @@ size = Vector2(1930, 20)
 [node name="MainArena" type="Node2D"]
 script = ExtResource("1_r7ygb")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="BackgroundColor" type="ColorRect" parent="."]
 offset_right = 1920.0
 offset_bottom = 1080.0
-color = Color(0.329832, 0.476577, 0.885455, 1)
+color = Color(0.329412, 0.478431, 0.886275, 1)
 
 [node name="RotationTracker" parent="." instance=ExtResource("7_2rdfv")]
 position = Vector2(898, 528)
@@ -39,7 +40,14 @@ position = Vector2(0, 540)
 script = ExtResource("4_kl8a0")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWall"]
+position = Vector2(0, -19.5)
 shape = SubResource("RectangleShape2D_yajwo")
+
+[node name="ColorRect" type="ColorRect" parent="LeftWall"]
+offset_left = 5.0
+offset_top = -496.0
+offset_right = 33.0
+offset_bottom = -456.0
 
 [node name="RightWall" type="Area2D" parent="." groups=["wall"]]
 position = Vector2(1920, 540)
@@ -47,6 +55,10 @@ script = ExtResource("5_3ienu")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall"]
 shape = SubResource("RectangleShape2D_kl8a0")
+
+[node name="ColorRect" type="ColorRect" parent="RightWall"]
+offset_right = 40.0
+offset_bottom = 40.0
 
 [node name="BottomWall" type="Area2D" parent="." groups=["wall"]]
 position = Vector2(960, 1080)
@@ -58,8 +70,11 @@ shape = SubResource("RectangleShape2D_3ienu")
 [node name="BubbleGridManager" parent="." instance=ExtResource("7_yilo4")]
 position = Vector2(897, 530)
 
-[node name="Backstop" type="Area2D" parent="."]
+[node name="Backstop" type="Area2D" parent="." groups=["backstop"]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Backstop"]
-position = Vector2(955, -34)
+position = Vector2(968, -69)
 shape = SubResource("RectangleShape2D_yilo4")
+
+[node name="RoundHandler" type="Node2D" parent="."]
+script = ExtResource("8_2rdfv")

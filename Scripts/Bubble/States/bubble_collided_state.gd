@@ -19,5 +19,6 @@ func post_enter() -> void:
 			return
 		else:
 			self.transition_requested.emit(self, State.MOVING)
-			
-		
+	
+	if area.is_in_group("backstop"):
+		bubble.queue_free()

@@ -7,7 +7,7 @@ signal bubble_destroyed(destroyed_bubble : BaseBubble)
 signal apply_effect_to_bubble_slot(effect : BaseEffect, bubble_slot_coords : Vector2i)
 signal rotate_bubble_grid(bubble_grid : BubbleGridManager, rotation_change : float)
 signal scoring_bubbles(score_number : ScoreNumber)
-
+signal changing_score(old_score : int, new_score : int)
 
 #signal reparent_requested(bubble : BaseBubble, new_parent : StringName)
 
@@ -46,3 +46,8 @@ func connect_apply_effect_to_bubble_slot(callable : Callable):
 	self.apply_effect_to_bubble_slot.connect(callable)
 func emit_apply_effect_to_bubble_slot(_effect_callable, _bubble_slot_coords):
 	apply_effect_to_bubble_slot.emit(_effect_callable, _bubble_slot_coords)
+
+func connect_changing_score(callable : Callable):
+	self.changing_score.connect(callable)
+func emit_changing_score(_old_score, _new_score):
+	changing_score.emit(_old_score, _new_score)
