@@ -12,10 +12,8 @@ class_name MainArena
 	#rotation_tracker.total_rotation = bubble_grid_manager.rotation
 	
 func _ready() -> void:
-	#bubble_grid_manager.position = 
 	bubble_grid_manager.set_up_grid_locations()
 	launcher.new_round()
 
 func change_background(new_color) -> void:
 	self.background_color.color = new_color
-	
